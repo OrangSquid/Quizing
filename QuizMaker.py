@@ -1,10 +1,28 @@
 import json
 import sys
 import getpass
-import codecs
-from colorama import *
-from QuizingCore import QuizCreateMode
 
+# These modules are in try/except statements to prevent errors from hapening 
+# Since they don't belong to the standard library
+try:
+    from QuizingCore import QuizCreateMode
+except ModuleNotFoundError as e:
+    print("\nAn error occured while importing QuizingCore.")
+    print("Redownloading the program might be a possible solution.")
+    print("Error:\n\n", e)
+    getpass.getpass("Press Enter to exit . . . ")
+    sys.exit()
+
+try:
+    from colorama import *
+except ModuleNotFoundError as e:
+    print("\nAn error occured while importing colorama.")
+    print("Please be sure that you have colorama instaled using pip.")
+    print("Error:\n\n", e)
+    getpass.getpass("Press Enter to exit . . . ")
+    sys.exit()
+
+# This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
 quiz = None
@@ -12,7 +30,7 @@ quiz = None
 def main():
     print(Style.BRIGHT + "Welcome to the Quiz Maker!")
     # Opens up a file in the same directory with the name quiz.json
-    # If it doesn't exist, the script will create one
+    # If it doesn't exist, a new one will be created
     def open_file():
         with open("quiz.quiz", "r") as f:
             global quiz

@@ -1,9 +1,21 @@
 import string
 import getpass
-from colorama import *
 
+# These modules are in try/except statements to prevent errors from hapening 
+# Since they don't belong to the standard library
+try:
+    from colorama import *
+except ModuleNotFoundError as e:
+    print("\nAn error occured while importing colorama.")
+    print("Please be sure that you have colorama instaled using pip.")
+    print("Error:\n\n", e)
+    getpass.getpass("Press Enter to exit . . . ")
+    sys.exit()
+
+# This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
+# Dicitonary to quiz options
 alpha_order = dict(enumerate(string.ascii_uppercase, 1))
 
 # This file contains the Quiz class and its methods that are used in the Quiz Maker script
@@ -16,6 +28,7 @@ class Quiz():
         self.questions = questions
         self.correct_answers = correct_answers
 
+# Class Used in QuizMaker.py
 class QuizCreateMode(Quiz):
     def __init__(self, name, questions, correct_answers, settings):
         super().__init__(name, questions, correct_answers)
@@ -163,9 +176,8 @@ class QuizCreateMode(Quiz):
     def set_settings(self):
         try:
             self.settings["default options"] = int(input("How many options will be the default number?\n"))
-            if self.settings["default options"] >= 27 or self.settings["default options"] <= 3:
-                while self.settings["default options"] >= 26:
-                    self.settings["default options"] = int(input("The number must be between 2 and 26! "))
+            while self.settings["default options"] >= 26 or self.settings["default options"] <= 3:
+                self.settings["default options"] = int(input("The number must be between 2 and 26! "))
             w = int(input("How many points should the player get for each wrong answer?\n"))
             r = int(input("How many points should the player get for each right answer?\n"))
         except:
@@ -222,3 +234,9 @@ class QuizPlayMode(Quiz):
                 self.points += self.scoring[0]
             number += 1
         print("You got {} answers right and {} points\n".format(self.right, self.points))
+
+# Hello me from the future!
+# I just wanted to tell you that this project took you a while to do
+# And if you find it stupid, clutered or innefecient, you're free to change it
+# I'm writting this on the 8th September, 2017, 13h48m and I still haven't finished it
+# I hope you're having a great time and wish you the best of luck!
