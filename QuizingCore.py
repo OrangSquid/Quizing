@@ -1,8 +1,11 @@
+# As the name suggets, this is the core of the quizing project
+# It contains the classes and the methods to play and create the quizes
+
 import string
 import getpass
 
-# These modules are in try/except statements to prevent errors from hapening 
-# Since they don't belong to the standard library
+# This module is in a try/except statement to prevent errors from hapening 
+# Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
@@ -17,9 +20,6 @@ init(autoreset = True)
 
 # Dicitonary to quiz options
 alpha_order = dict(enumerate(string.ascii_uppercase, 1))
-
-# This file contains the Quiz class and its methods that are used in the Quiz Maker script
-# TODO add_question, add a method to move questions into other order and add timed quizes
 
 # Base Class for the CreateMode and PlayMode
 class Quiz():
@@ -36,68 +36,43 @@ class QuizCreateMode(Quiz):
 
     # Method for changing the settings of the quiz
     def change_settings(self):
-        while True:
-            print(
-"""What setting do you want to change?
 
-1. Default number of options
-2. Name of the quiz
-3. Scoring system""")
-            print(Fore.RED + Style.BRIGHT + "4. Return\n")
-            action = input()
+        def number_options(self):
+            print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
+            try:
+                self.settings["default options"] = int(input("How many options do you want then?"))
+            except:
+                print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
+                self.change_settings.number_options()
+            print("The default number of options was changed successfully!")
 
-            if action == "1":
+        def name(self):
+            self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
+            print("Name changed successfully!")
+
+        def scoring(self, option):
+            if option == "1":
                 while True:
-                    print("How many options do you want then?")
-                    print(Back.RED + Style.BRIGHT + "Please note that the quiz questions won't be affected!\n")
+                    print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
                     try:
-                        self.settings["default options"] = int(input())
+                        self.settings["question points"][0] = int(input("How many points should the player get?"))
+                        break
                     except:
-                        print("You must input a number !!\n")
+                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
                         continue
-                print("The default number of options was changed!\n")
+                    print("Scoring system changed successufully!")
+                    return
 
             elif action == "2":
-                self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
-                print("Name changed successfully!")
-
-            elif action == "3":
                 while True:
-                    print(
-"""Do you want to change the wrong answer or right answer points?
-
-1. Wrong
-2. Right""")
-                    print(Fore.RED + Style.BRIGHT + "3. Return\n")
-                    action = input()
-
-                    if action == "1":
-                        while True:
-                            print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
-                            try:
-                                self.settings["question points"][0] = int(input("How many points should the player get?"))
-                            except:
-                                print("You must input a number!")
-                                continue
-                            print("Scoring system changed successufully!")
-
-                    elif action == "2":
-                        while True:
-                            print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
-                            try:
-                                self.settings["question points"][0] = int(input("How many points should the player get?"))
-                            except:
-                                print("You must input a number!")
-                                continue
-                            print("Scoring system changed successufully!")
-                
-                    elif action == "3":
-                        getpass.getpass("Press Enter to return . . .")
-                        break
-
-            elif action == "4":
-                getpass.getpass("Press Enter to return . . .")
-                break
+                    print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
+                    try:
+                        self.settings["question points"][0] = int(input("How many points should the player get?"))
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                        continue
+                    print("Scoring system changed successufully!")
+                    return
 
     # Method for printing the quiz
     def __str__(self):
@@ -125,42 +100,18 @@ class QuizCreateMode(Quiz):
         return ""
     
     # Method for adding a question
-    def add_question1(self):
-        q = input("What's the question?\n\n")
-        while True:
-            action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(self.settings["default options"])).upper()
-            if action == "Y":
-                self.add_question2(self.settings["default options"], q)
-                return
-            elif action == "N":
-                while True:
-                    try:
-                        n = int(input("How many options do you want then? MAX: 26\n"))
-                        if n == 1 or n >= 26:
-                            print("You must input a number between 2 and 26!\n")
-                            continue
-                    except:
-                        print("You must input a number between 2 and 26!\n")
-                        continue
-                    break
-                self.add_question2(n, q)
-                return
-            else:
-                print("You must input a Y or N!")
-                continue
-
-    def add_question2(self, number, question):
+    def add_question(self, number, question):
         question_temp = {"question": question}
         for x in range(1, number + 1):
-            use = "Option " + alpha_order[x] + ". "
-            question_temp["Option " +  alpha_order[x]] = input(use)
+            question_temp["Option " +  alpha_order[x]] = input("Option " + alpha_order[x] + ". ")
         while True:
             correct = input("\nWhat option is the correct one? Write the letter: ").upper()
             for x in question_temp.keys():
+                # The 7th index is where the letter is *
                 if x[7] == correct:
                     break
             else:
-                print("You must input the letter of the correct option!")
+                print(Fore.RED + Style.BRIGHT + "You must input the letter of the correct option!")
                 continue
             break
         self.questions["question " + str(len(self.questions) + 1)] = question_temp
@@ -181,7 +132,7 @@ class QuizCreateMode(Quiz):
             w = int(input("How many points should the player get for each wrong answer?\n"))
             r = int(input("How many points should the player get for each right answer?\n"))
         except:
-            print("You must input a number!")
+            print(Fore.RED + Style.BRIGHT + "You must input a number!")
             self.set_settings()
         self.settings["scoring"] = [w, r]
         self.name = input("What's the name of this quiz?\n")
@@ -240,3 +191,11 @@ class QuizPlayMode(Quiz):
 # And if you find it stupid, clutered or innefecient, you're free to change it
 # I'm writting this on the 8th September, 2017, 13h48m and I still haven't finished it
 # I hope you're having a great time and wish you the best of luck!
+
+# UPDATE: Hi me from the past and the future, this code is a mess and right now I'm fixing it
+# I won't fix everything (obviously), but probably the me from the future will fix it. Right now is 7th November 2017, 20h51
+
+# * Why the fuck didn't you first commented this
+# I have been staring at this for a whole 10 minutes
+# Trying to figure it out
+# Dumbass
