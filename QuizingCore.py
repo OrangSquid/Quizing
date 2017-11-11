@@ -61,7 +61,6 @@ class QuizCreateMode(Quiz):
                         print(Fore.RED + Style.BRIGHT + "You must input a number!")
                         continue
                     print("Scoring system changed successufully!")
-                    return
 
             elif action == "2":
                 while True:
@@ -72,7 +71,8 @@ class QuizCreateMode(Quiz):
                         print(Fore.RED + Style.BRIGHT + "You must input a number!")
                         continue
                     print("Scoring system changed successufully!")
-                    return
+
+            change_settings.number_options = None
 
     # Method for printing the quiz
     def __str__(self):

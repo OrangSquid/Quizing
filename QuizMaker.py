@@ -1,5 +1,3 @@
-print(Style.BRIGHT + "Welcome to the Quiz Maker!")
-
 import json
 import sys
 import getpass
@@ -28,20 +26,25 @@ except ModuleNotFoundError as e:
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
+print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+
 # Variable to hold the quiz
 quiz = None
 
-# Opens up a file in the same directory with the name quiz.json
+# Funtions that open up a file in the same directory with the name quiz.quiz
 # If it doesn't exist, a new one will be created
 def open_file():
     global quiz
-
-    with open("quiz.quiz", "r") as f:
-        try:
+    try:
+        with open("quiz.quiz", "r") as f:
             quiz_file = json.load(f)
-        except:
-            os.system("del quiz.quiz")
-            create_file()
+            print(Style.BRIGHT + "Check 1")
+    except FileNotFoundError:
+        create_file()
+    except:
+        os.remove("quiz.quiz")
+        print(Style.BRIGHT + "Check 2")
+        create_file()
 
     if quiz_file == {}:
         with open("quiz.quiz", "w") as f2:
@@ -54,18 +57,18 @@ def open_file():
         quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
 
 def create_file():
-    try:
-        with open("quiz.quiz", "x") as f:
-            json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f)
-            print("Created new file!")
-            print("If you didn't want to create a new file, please check if the file you")
-            print("want to work with has the name quiz.quiz""")
-            open_file()
-            quiz.set_settings()
-    except:
+    with open("quiz.quiz", "x") as f:
+        json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f)
+        print("Created new file!")
+        print("If you didn't want to create a new file, please check if the file you")
+        print("want to work with has the name quiz.quiz""")
         open_file()
+        quiz.set_settings()
 
 def main():
+
+    open_file()
+
     print("What do you want to do?")
     print()
     print("1. Change quiz settings")
@@ -118,22 +121,24 @@ def main():
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
 
-                # Return
-                elif action == "4":
-                    getpass.getpass("Press Enter to return . . . ")
-                    break
+            # Return
+            elif action == "4":
+                getpass.getpass("Press Enter to return . . . ")
 
-                else:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
-                    continue
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
+                continue
+            break
 
-        # Check quiz
-        elif action == "2":
-            print(quiz)
+    # Check quiz
+    elif action == "2":
+        print(quiz)
+        main()
 
-        # Add question
-        elif action == "3":
-            question = input("What's the question?\n\n")
+    # Add question
+    elif action == "3":
+        question = input("What's the question?\n\n")
+        while True:
             action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(self.settings["default options"])).upper()
             if action == "Y":
                 self.add_question(self.settings["default options"], question)
@@ -149,37 +154,34 @@ def main():
                         print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                         continue
                 quiz.add_question(options, question)
-                del options
-                del question
-                continue
+                main()
             else:
-                print(Fore.RED + Style.BRIGHT + "You must input a Y or N!")
+                print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
         
-        # Delete question
-        elif action == "4":
-            while True:
-                try:
-                    number = int(input("What question do you want to delete?"))
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                    continue
-            quiz.delete_question(number)
-            del number
-            continue
-        
-        # Exit and save
-        elif action == "5":
-            with open("quiz.quiz", "w") as f:
-                json.dump({"name": quiz.name, 
-                           "settings": quiz.settings, 
-                           "questions": quiz.questions, 
-                           "correct_answers": quiz.correct_answers}, f)
-                getpass.getpass("Press Enter to exit . . .")
-                sys.exit()
+    # Delete question
+    elif action == "4":
+        while True:
+            try:
+                number = int(input("What question do you want to delete? "))
+                quiz.delete_question(number)
+                break
+            except:
+                print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                continue
 
-        else:
-            print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
+    # Exit and save
+    elif action == "5":
+        with open("quiz.quiz", "w") as f:
+            json.dump({"name": quiz.name, 
+                       "settings": quiz.settings, 
+                       "questions": quiz.questions, 
+                       "correct_answers": quiz.correct_answers}, f)
+            getpass.getpass("Press Enter to exit . . .")
+            sys.exit()
+
+    else:
+        print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
 
 if __name__ == "__main__":
     main()
