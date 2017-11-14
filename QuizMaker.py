@@ -128,7 +128,6 @@ def main():
                     if action == "1" or action == "2":
                         quiz.change__scoring(action)
                         break
-
                     else:
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
@@ -136,20 +135,14 @@ def main():
             # Return
             elif action == "4":
                 getpass.getpass("Press Enter to return . . . ")
-<<<<<<< HEAD
                 break
-=======
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
                 continue
-<<<<<<< HEAD
-            # Reason #1
-            main()
-=======
-            break
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
+            
+        # Reason #1
+        main()
 
     # Check quiz
     elif action == "2":
@@ -177,11 +170,8 @@ def main():
                         print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                         continue
                 quiz.add_question(options, question)
-<<<<<<< HEAD
                 del options
                 del question
-=======
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
                 main()
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
@@ -193,17 +183,11 @@ def main():
     elif action == "4":
         while True:
             try:
-<<<<<<< HEAD
                 number = int(input("What question do you want to delete?"))
-=======
-                number = int(input("What question do you want to delete? "))
-                quiz.delete_question(number)
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
                 break
             except:
                 print(Fore.RED + Style.BRIGHT + "You must input a number!")
                 continue
-<<<<<<< HEAD
         quiz.delete_question(number)
         del number
         # Reason #1
@@ -216,29 +200,13 @@ def main():
                         "settings": quiz.settings, 
                         "questions": quiz.questions, 
                         "correct_answers": quiz.correct_answers}, f)
-=======
-
-    # Exit and save
-    elif action == "5":
-        with open("quiz.quiz", "w") as f:
-            json.dump({"name": quiz.name, 
-                       "settings": quiz.settings, 
-                       "questions": quiz.questions, 
-                       "correct_answers": quiz.correct_answers}, f)
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
             getpass.getpass("Press Enter to exit . . .")
             sys.exit()
 
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
-<<<<<<< HEAD
         # Reason #1
         main()
-=======
-
-if __name__ == "__main__":
-    main()
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
