@@ -142,6 +142,8 @@ class QuizPlayMode(Quiz):
     def __init__(self, name, questions, correct_answers, settings):
         super().__init__(name, questions, correct_answers)
         self.scoring = settings["scoring"]
+        # Variable to hold the number of points the player has got and
+        # The number of questions the player got right
         self.points = 0
         self.right = 0
         
