@@ -1,4 +1,4 @@
-print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+# Script that will make the quiz
 
 import json
 import sys
@@ -25,6 +25,8 @@ except ModuleNotFoundError as e:
     getpass.getpass("Press Enter to exit . . . ")
     sys.exit()
 
+print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
@@ -34,37 +36,11 @@ quiz = None
 # Opens up a file in the same directory with the name quiz.json
 # If it doesn't exist, a new one will be created
 def open_file():
-    global quiz
-
-    with open("quiz.quiz", "r") as f:
-        try:
-            quiz_file = json.load(f)
-        except:
-            os.system("del quiz.quiz")
-            create_file()
-
-    if quiz_file == {}:
-        with open("quiz.quiz", "w") as f2:
-            json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f2)
-        with open("quiz.quiz", "r") as f2:
-            quiz_file = json.load(f2)
-            quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
-            quiz.set_settings()
-    else:
-        quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
+    pass
 
 def create_file():
-    try:
-        with open("quiz.quiz", "x") as f:
-            json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f)
-            print("Created new file!")
-            print("If you didn't want to create a new file, please check if the file you")
-            print("want to work with has the name quiz.quiz""")
-            open_file()
-            quiz.set_settings()
-    except:
-        open_file()
-
+    pass
+    
 def main():
     print("What do you want to do?")
     print()
@@ -91,12 +67,12 @@ def main():
 
             # Default number of options
             if action == "1":
-                quiz.change_settings.number_options()
+                quiz.change__number_options()
                 break
 
             # Name of the quiz
             elif action == "2":
-                quiz.change_settings.name()
+                quiz.change__name()
                 break
 
             # Scoring system
@@ -111,78 +87,87 @@ def main():
                     action = input()
 
                     if action == "1" or action == "2":
-                        quiz.change_settings.scoring(action)
+                        quiz.change__scoring(action)
                         break
 
                     else:
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
 
-                # Return
-                elif action == "4":
-                    getpass.getpass("Press Enter to return . . . ")
-                    break
+            # Return
+            elif action == "4":
+                getpass.getpass("Press Enter to return . . . ")
+                break
 
-                else:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
-                    continue
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
+                continue
+            # Reason #1
+            main()
 
-        # Check quiz
-        elif action == "2":
-            print(quiz)
+    # Check quiz
+    elif action == "2":
+        print(quiz)
+        main()
 
-        # Add question
-        elif action == "3":
-            question = input("What's the question?\n\n")
+    # Add question
+    elif action == "3":
+        question = input("What's the question?\n\n")
+        while True:
             action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(self.settings["default options"])).upper()
             if action == "Y":
                 self.add_question(self.settings["default options"], question)
-                return
+                main()
             elif action == "N":
                 while True:
                     try:
-                        options = int(input("How many options do you want then? MAX: 26\n"))
+                        options = int(input("How many options do you want then? MAX 26:\n"))
                         if n < 1 or n > 27:
                             print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                             continue
+                        else:
+                            break
                     except:
                         print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                         continue
                 quiz.add_question(options, question)
                 del options
                 del question
-                continue
+                main()
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!")
                 continue
+        #Reason #1
+        main()
         
-        # Delete question
-        elif action == "4":
-            while True:
-                try:
-                    number = int(input("What question do you want to delete?"))
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                    continue
-            quiz.delete_question(number)
-            del number
-            continue
+    # Delete question
+    elif action == "4":
+        while True:
+            try:
+                number = int(input("What question do you want to delete?"))
+                break
+            except:
+                print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                continue
+        quiz.delete_question(number)
+        del number
+        # Reason #1
+        main()
         
-        # Exit and save
-        elif action == "5":
-            with open("quiz.quiz", "w") as f:
-                json.dump({"name": quiz.name, 
-                           "settings": quiz.settings, 
-                           "questions": quiz.questions, 
-                           "correct_answers": quiz.correct_answers}, f)
-                getpass.getpass("Press Enter to exit . . .")
-                sys.exit()
+    # Exit and save
+    elif action == "5":
+        with open(r"C:\Users\rafae\Desktop\quiz.quiz", "w") as f:
+            json.dump({"name": quiz.name, 
+                        "settings": quiz.settings, 
+                        "questions": quiz.questions, 
+                        "correct_answers": quiz.correct_answers}, f)
+            getpass.getpass("Press Enter to exit . . .")
+            sys.exit()
 
-        else:
-            print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
-
-if __name__ == "__main__":
-    main()
+    else:
+        print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
+        # Reason #1
+        main()
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
@@ -192,3 +177,11 @@ if __name__ == "__main__":
 
 # UPDATE: Hi me from the past and the future, this code is a mess and right now I'm fixing it
 # I won't fix everything (obviously), but probably the me from the future will fix it. Right now is 7th November 2017, 20h51
+
+# To stop reapiting the same reasons over and over, I made a list so that
+# You can refer to here
+
+# Reason #1
+# This is in the middle of nowhere to make sure that after
+# The user is done with this operation it returns right back into the main action "asker"
+# (I couldn't come up with a better name)

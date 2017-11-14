@@ -34,45 +34,43 @@ class QuizCreateMode(Quiz):
         super().__init__(name, questions, correct_answers)
         self.settings = settings
 
-    # Method for changing the settings of the quiz
-    def change_settings(self):
+    # Methods for changing the settings of the quiz
+    # Every method that starts with "change__" is about changing the settings of the quiz
+    def change__number_options(self):
+        print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
+        try:
+            self.settings["default options"] = int(input("How many options do you want then?"))
+        except:
+            print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
+            self.change_settings.number_options()
+        print("The default number of options was changed successfully!")
 
-        def number_options(self):
-            print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
-            try:
-                self.settings["default options"] = int(input("How many options do you want then?"))
-            except:
-                print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
-                self.change_settings.number_options()
-            print("The default number of options was changed successfully!")
+    def change__name(self):
+        self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
+        print("Name changed successfully!")
 
-        def name(self):
-            self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
-            print("Name changed successfully!")
+    def change__scoring(self, option):
+        if option == "1":
+            while True:
+                print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
+                try:
+                    self.settings["question points"][0] = int(input("How many points should the player get?"))
+                    break
+                except:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                    continue
+                print("Scoring system changed successufully!")
+                return
 
-        def scoring(self, option):
-            if option == "1":
-                while True:
-                    print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
-                    try:
-                        self.settings["question points"][0] = int(input("How many points should the player get?"))
-                        break
-                    except:
-                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                        continue
-                    print("Scoring system changed successufully!")
-                    return
-
-            elif action == "2":
-                while True:
-                    print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
-                    try:
-                        self.settings["question points"][0] = int(input("How many points should the player get?"))
-                    except:
-                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                        continue
-                    print("Scoring system changed successufully!")
-                    return
+        elif action == "2":
+            while True:
+                print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
+                try:
+                    self.settings["question points"][0] = int(input("How many points should the player get?"))
+                except:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                    continue
+                print("Scoring system changed successufully!")
 
     # Method for printing the quiz
     def __str__(self):

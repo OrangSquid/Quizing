@@ -1,3 +1,5 @@
+# Script that will run the quiz
+
 import json
 import sys
 import getpass
@@ -25,6 +27,7 @@ except ModuleNotFoundError as e:
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
+# Variable to hold the quiz
 quiz = None
 
 def main():
@@ -56,9 +59,6 @@ def main():
         else:
             print("You must input a 1 or 2!\n")
             continue
-
-if __name__ == "__main__":
-    main()
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
