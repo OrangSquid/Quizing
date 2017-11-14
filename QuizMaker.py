@@ -38,45 +38,11 @@ quiz = None
 # Funtions that open up a file in the same directory with the name quiz.quiz
 # If it doesn't exist, a new one will be created
 def open_file():
-<<<<<<< HEAD
     pass
 
 def create_file():
     pass
-    
-=======
-    global quiz
-    try:
-        with open("quiz.quiz", "r") as f:
-            quiz_file = json.load(f)
-            print(Style.BRIGHT + "Check 1")
-    except FileNotFoundError:
-        create_file()
-    except:
-        os.remove("quiz.quiz")
-        print(Style.BRIGHT + "Check 2")
-        create_file()
 
-    if quiz_file == {}:
-        with open("quiz.quiz", "w") as f2:
-            json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f2)
-        with open("quiz.quiz", "r") as f2:
-            quiz_file = json.load(f2)
-            quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
-            quiz.set_settings()
-    else:
-        quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
-
-def create_file():
-    with open("quiz.quiz", "x") as f:
-        json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f)
-        print("Created new file!")
-        print("If you didn't want to create a new file, please check if the file you")
-        print("want to work with has the name quiz.quiz""")
-        open_file()
-        quiz.set_settings()
-
->>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 def main():
 
     open_file()
