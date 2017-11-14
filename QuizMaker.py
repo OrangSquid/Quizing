@@ -30,18 +30,57 @@ print(Style.BRIGHT + "Welcome to the Quiz Maker!")
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
+print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+
 # Variable to hold the quiz
 quiz = None
 
-# Opens up a file in the same directory with the name quiz.json
+# Funtions that open up a file in the same directory with the name quiz.quiz
 # If it doesn't exist, a new one will be created
 def open_file():
+<<<<<<< HEAD
     pass
 
 def create_file():
     pass
     
+=======
+    global quiz
+    try:
+        with open("quiz.quiz", "r") as f:
+            quiz_file = json.load(f)
+            print(Style.BRIGHT + "Check 1")
+    except FileNotFoundError:
+        create_file()
+    except:
+        os.remove("quiz.quiz")
+        print(Style.BRIGHT + "Check 2")
+        create_file()
+
+    if quiz_file == {}:
+        with open("quiz.quiz", "w") as f2:
+            json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f2)
+        with open("quiz.quiz", "r") as f2:
+            quiz_file = json.load(f2)
+            quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
+            quiz.set_settings()
+    else:
+        quiz = QuizCreateMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
+
+def create_file():
+    with open("quiz.quiz", "x") as f:
+        json.dump({"name": "", "settings": {}, "questions": {}, "correct_answers": []}, f)
+        print("Created new file!")
+        print("If you didn't want to create a new file, please check if the file you")
+        print("want to work with has the name quiz.quiz""")
+        open_file()
+        quiz.set_settings()
+
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 def main():
+
+    open_file()
+
     print("What do you want to do?")
     print()
     print("1. Change quiz settings")
@@ -97,13 +136,20 @@ def main():
             # Return
             elif action == "4":
                 getpass.getpass("Press Enter to return . . . ")
+<<<<<<< HEAD
                 break
+=======
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
                 continue
+<<<<<<< HEAD
             # Reason #1
             main()
+=======
+            break
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 
     # Check quiz
     elif action == "2":
@@ -131,11 +177,14 @@ def main():
                         print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                         continue
                 quiz.add_question(options, question)
+<<<<<<< HEAD
                 del options
                 del question
+=======
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
                 main()
             else:
-                print(Fore.RED + Style.BRIGHT + "You must input a Y or N!")
+                print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
         #Reason #1
         main()
@@ -144,11 +193,17 @@ def main():
     elif action == "4":
         while True:
             try:
+<<<<<<< HEAD
                 number = int(input("What question do you want to delete?"))
+=======
+                number = int(input("What question do you want to delete? "))
+                quiz.delete_question(number)
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
                 break
             except:
                 print(Fore.RED + Style.BRIGHT + "You must input a number!")
                 continue
+<<<<<<< HEAD
         quiz.delete_question(number)
         del number
         # Reason #1
@@ -161,13 +216,29 @@ def main():
                         "settings": quiz.settings, 
                         "questions": quiz.questions, 
                         "correct_answers": quiz.correct_answers}, f)
+=======
+
+    # Exit and save
+    elif action == "5":
+        with open("quiz.quiz", "w") as f:
+            json.dump({"name": quiz.name, 
+                       "settings": quiz.settings, 
+                       "questions": quiz.questions, 
+                       "correct_answers": quiz.correct_answers}, f)
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
             getpass.getpass("Press Enter to exit . . .")
             sys.exit()
 
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
+<<<<<<< HEAD
         # Reason #1
         main()
+=======
+
+if __name__ == "__main__":
+    main()
+>>>>>>> 9baf8dd1ac22dd5bca03256bea01d7135c07e347
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
