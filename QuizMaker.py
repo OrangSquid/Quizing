@@ -3,7 +3,6 @@
 import json
 import sys
 import getpass
-import os
 
 # These modules are in try/except statements to prevent errors from hapening 
 # Since they don't belong to the standard library
@@ -14,7 +13,7 @@ except ModuleNotFoundError as e:
     print("Redownloading the program might be a possible solution.")
     print("Error:\n\n", e)
     getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
+    sys.exit(-1)
 
 try:
     from colorama import *
@@ -23,25 +22,16 @@ except ModuleNotFoundError as e:
     print("Please be sure that you have colorama instaled using pip.")
     print("Error:\n\n", e)
     getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
-
-print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+    sys.exit(-1)
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
 # Variable to hold the quiz
 quiz = None
-
-# Opens up a file in the same directory with the name quiz.json
-# If it doesn't exist, a new one will be created
-def open_file():
-    pass
-
-def create_file():
-    pass
     
 def main():
+    print(Style.BRIGHT + "Welcome to the Quiz Maker!")
     print("What do you want to do?")
     print()
     print("1. Change quiz settings")
@@ -168,6 +158,11 @@ def main():
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
         # Reason #1
         main()
+
+# I want to make sure you first pass through QuizStart (which has the functionaltiy to open the file and
+# handle it to the Maker and Player)
+if __name__ == "__main__":
+    sys.exit(-1)
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
