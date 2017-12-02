@@ -3,17 +3,7 @@
 import json
 import sys
 import getpass
-
-# These modules are in try/except statements to prevent errors from hapening 
-# Since they don't belong to the standard library
-try:
-    from QuizingCore import QuizCreateMode
-except ModuleNotFoundError as e:
-    print("\nAn error occured while importing QuizingCore.")
-    print("Redownloading the program might be a possible solution.")
-    print("Error:\n\n", e)
-    getpass.getpass("Press Enter to exit . . . ")
-    sys.exit(-1)
+from QCore import QuizCreateMode
 
 try:
     from colorama import *
@@ -31,6 +21,10 @@ print(Style.BRIGHT + "Welcome to the Quiz Maker!")
 
 # Variable to hold the quiz
 quiz = None
+
+def start(file):
+    global quiz
+    quiz = QuizCreateMode()
     
 def main():
     print(Style.BRIGHT + "Welcome to the Quiz Maker!")

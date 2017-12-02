@@ -1,32 +1,28 @@
-# Script to handle file opening and starting (You need to get good at naming)
+# Script to handle file opening and starting 
+# (You need to get good at naming)
 
 import os
 import sys
 import getpass
-
-# These modules are in try/except statements to prevent errors from hapening 
-# Since they don't belong to the standard library
-try:
-	import QuizMaker
-except ModuleNotFoundError as e:
-	print("\nAn error occured while importing QuizMaker.")
-	print("Redownloading the program might be a possible solution.")
-	print("\nError:", e)
-	getpass.getpass("Press Enter to exit . . . ")
-	sys.exit(-1)
-
-try:
-	import QuizPlayer
-except ModuleNotFoundError as e:
-	print("\nAn error occured while importing QuizPlayer.")
-	print("Redownloading the program might be a possible solution.")
-	print("\nError:", e)
-	getpass.getpass("Press Enter to exit . . . ")
-	sys.exit(-1)
-
-filenames = os.listdir(os.curdir)
+import QuizingStuff
 
 print("Welcome to the Quizing Project!\n")
+
+# Checks if user has inputed a file through drag'n'drop
+# or opened it directly
+try:
+	if os.path.isfile(sys.argv[1]) and sys.argv[1].endswith(".quiz"):
+		print("You have inputed a valid file!")
+		getpass.getpass("Press Enter to exit . . .")
+	else:
+		print("You haven't inputed a valid file!")
+		getpass.getpass("Press Enter to exit . . .")
+except:
+	pass
+
+# In case the user doesn't provide any file the script
+# will search in the current directory
+filenames = os.listdir(os.curdir)
 
 valid_options = []
 
@@ -44,7 +40,34 @@ elif len(valid_options) == 1:
 else:
 	print("You have multiple quiz files")
 	print("Please choose one!")
+	for file in valid_options:
+		option = 1
+		print("1. " + file)
+		option += 1
+	while True:
+		try:
+			option = int(input())
+		except:
+			print("You must input a valid number!")
+			continue
+		if option =< len(valid_options):
+			choose_path(valid_options[option - 1])
 
-print("Would you like to:\n")
-print("1. Make a Quiz")
-print("2. Play a Quiz")
+def choose_path(file):
+	print("Would you like to:\n")
+	print("1. Make a Quiz")
+	print("2. Play a Quiz")
+	print()
+
+	while True:
+		action = input()
+
+		if action == "1":
+			pass
+
+		if action == "2":
+			pass
+
+		else:
+			print("You must input a valid number!")
+			continue

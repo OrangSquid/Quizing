@@ -1,0 +1,11 @@
+{
+	"quiz_ver" : "a0.1",
+	"name" : "",
+	"settings" : {
+		"default_options" : 0,
+		"scoring" : [0, 0]
+	},
+	"questions" : {
+		"question 1"
+	}
+}
