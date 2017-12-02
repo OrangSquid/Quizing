@@ -6,4 +6,4 @@ This script will read through the current directory to files with the .quiz exte
 If you want you can also drag and drop into the programm.
 
 ## The .quiz file
-The .quiz file is pretty much a JSON file with a different extension. It uses this structre:
+The .quiz file is pretty much a JSON file with a different extension.
