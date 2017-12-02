@@ -1,4 +1,4 @@
-# Script that will run the quiz
+# Script that will play the quiz
 
 import json
 import sys
@@ -13,7 +13,7 @@ except ModuleNotFoundError as e:
     print("Redownloading the program might be a possible solution.")
     print("Error:\n\n", e)
     getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
+    sys.exit(-1)
 
 try:
     from colorama import *
@@ -22,7 +22,7 @@ except ModuleNotFoundError as e:
     print("Please be sure that you have colorama instaled using pip.")
     print("Error:\n\n", e)
     getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
+    sys.exit(-1)
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
@@ -31,17 +31,7 @@ init(autoreset = True)
 quiz = None
 
 def main():
-    print(Style.BRIGHT + "Welcome to the Quiz Runner!")
-    try:
-        with open("quiz.quiz", "r") as f:
-            quiz_file = json.load(f)
-            global quiz
-            quiz = QuizPlayMode(quiz_file["name"], quiz_file["questions"], quiz_file["correct_answers"], quiz_file["settings"])
-    except Exception as e:
-        print("An error ocurred!\n")
-        print(e)
-        getpass.getpass("Press Enter to exit . . .")
-        sys.exit()
+    print(Style.BRIGHT + "Welcome to the Quiz Player!")
 
     while True:
         print(
