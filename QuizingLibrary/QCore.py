@@ -3,6 +3,7 @@
 
 import string
 import getpass
+from __init__ import *
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
@@ -27,6 +28,7 @@ class Quiz():
         self.name = name
         self.questions = questions
         self.correct_answers = correct_answers
+        self.CONST_version_number = "a0.1"
 
 # Class Used in QuizMaker.py
 class QuizCreateMode(Quiz):
@@ -146,6 +148,8 @@ class QuizPlayMode(Quiz):
         self.right = 0
         
     def play(self):
+        if self.quiz_ver == CONST_version_number
+
         print("Let's play!")
         number = 1
         for x in self.questions.values():

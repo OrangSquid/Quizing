@@ -4,19 +4,55 @@
 import os
 import sys
 import getpass
-import QuizingStuff
+import QuizingLibrary
 
 print("Welcome to the Quizing Project!\n")
+
+def choose_path(*file):
+	try:
+		file[0]
+	except:
+		file_exists = False
+		print("Would you like to:\n")
+		print("1. Make a Quiz")
+		print("3. Exit")
+	else:
+		file_exists = True
+		print("Would you like to:\n")
+		print("1. Make a Quiz")
+		print("2. Play a Quiz")
+		print("3. Exit")
+		print()
+
+	while True:
+		action = input()
+
+		if action == "1":
+			quiz = QuizingLibrary.QCore.QuizCreateMode(file)
+			QuizingLibrary.QMaker.start(quiz)
+
+		elif action == "2" and file_exists:
+			quiz = QuizingLibrary.QCore.QuizPlayMode(file)
+			QuizingLibrary.QPlayer.start(quiz)
+
+		elif action == "3":
+			getpass.getpass("Press Enter to exit . . .")
+			sys.exit()
+
+		else:
+			print("You must input a valid number!")
+			continue
 
 # Checks if user has inputed a file through drag'n'drop
 # or opened it directly
 try:
 	if os.path.isfile(sys.argv[1]) and sys.argv[1].endswith(".quiz"):
-		print("You have inputed a valid file!")
-		getpass.getpass("Press Enter to exit . . .")
+		print("You have inputed a valid file!\n")
+		choose_path(sys.argv[1])
 	else:
-		print("You haven't inputed a valid file!")
-		getpass.getpass("Press Enter to exit . . .")
+		# This sentence will probably get out sometime, but I will leave
+		# it here for debugging purpuses
+		print("You haven't inputed a file though drag'n'drop!\n")
 except:
 	pass
 
@@ -26,6 +62,7 @@ filenames = os.listdir(os.curdir)
 
 valid_options = []
 
+# Checks if file has a valid extension
 for filename in filenames:
     if os.path.isfile(filename) and filename.endswith(".quiz"):
     	valid_options.append(filename)
@@ -52,22 +89,3 @@ else:
 			continue
 		if option =< len(valid_options):
 			choose_path(valid_options[option - 1])
-
-def choose_path(file):
-	print("Would you like to:\n")
-	print("1. Make a Quiz")
-	print("2. Play a Quiz")
-	print()
-
-	while True:
-		action = input()
-
-		if action == "1":
-			pass
-
-		if action == "2":
-			pass
-
-		else:
-			print("You must input a valid number!")
-			continue

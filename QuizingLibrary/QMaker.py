@@ -4,7 +4,10 @@ import json
 import sys
 import getpass
 from QCore import QuizCreateMode
+from __init__ import CONST_version_number
 
+# This module is in a try/except statement to prevent errors from hapening 
+# Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
@@ -18,15 +21,8 @@ except ModuleNotFoundError as e:
 init(autoreset = True)
 
 print(Style.BRIGHT + "Welcome to the Quiz Maker!")
-
-# Variable to hold the quiz
-quiz = None
-
-def start(file):
-    global quiz
-    quiz = QuizCreateMode()
     
-def main():
+def main(quiz):
     print(Style.BRIGHT + "Welcome to the Quiz Maker!")
     print("What do you want to do?")
     print()
@@ -155,7 +151,7 @@ def main():
         # Reason #1
         main()
 
-# I want to make sure you first pass through QuizStart (which has the functionaltiy to open the file and
+# I want to make sure you first pass through QuizingProject.py (which has the functionaltiy to open the file and
 # handle it to the Maker and Player)
 if __name__ == "__main__":
     sys.exit(-1)
