@@ -1,9 +1,8 @@
 # Script that will make the quiz
 
-import json
 import sys
 import getpass
-from QCore import QuizCreateMode
+from QuizingCore import QuizCreateMode
 from __init__ import CONST_version_number
 
 # This module is in a try/except statement to prevent errors from hapening 
@@ -11,11 +10,7 @@ from __init__ import CONST_version_number
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    print("\nAn error occured while importing colorama.")
-    print("Please be sure that you have colorama instaled using pip.")
-    print("Error:\n\n", e)
-    getpass.getpass("Press Enter to exit . . . ")
-    sys.exit(-1)
+    os.system("pip install colorama")
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
@@ -49,12 +44,12 @@ def main(quiz):
 
             # Default number of options
             if action == "1":
-                quiz.change__number_options()
+                quiz.change.number_options()
                 break
 
             # Name of the quiz
             elif action == "2":
-                quiz.change__name()
+                quiz.change.name()
                 break
 
             # Scoring system
@@ -69,7 +64,7 @@ def main(quiz):
                     action = input()
 
                     if action == "1" or action == "2":
-                        quiz.change__scoring(action)
+                        quiz.change.scoring(action)
                         break
                     else:
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")

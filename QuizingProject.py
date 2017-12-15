@@ -4,36 +4,58 @@
 import os
 import sys
 import getpass
+import json
 import QuizingLibrary
 
-print("Welcome to the Quizing Project!\n")
+# This module is in a try/except statement to prevent errors from hapening 
+# Since it doesn't belong to the standard library
+try:
+    from colorama import *
+except ModuleNotFoundError as e:
+    os.system("pip install colorama")
+
+print(Style.BRIGHT + "Welcome to the Quizing Project!\n")
 
 def choose_path(*file):
+	temp = None
 	try:
-		file[0]
+		with open(file[0], "r") as f:
+			temp = json.load(f)
 	except:
+		# This is out of order to make sure it matches with the
+		# if statements below
+		# (lazy bitch)
 		file_exists = False
-		print("Would you like to:\n")
+		print("\nWould you like to:\n")
 		print("1. Make a Quiz")
 		print("3. Exit")
 	else:
 		file_exists = True
-		print("Would you like to:\n")
-		print("1. Make a Quiz")
-		print("2. Play a Quiz")
+		print("\nWould you like to:\n")
+		print("1. Edit the Quiz")
+		print("2. Play the Quiz")
 		print("3. Exit")
 		print()
 
 	while True:
 		action = input()
 
+		# Make or Edit Quiz
 		if action == "1":
-			quiz = QuizingLibrary.QCore.QuizCreateMode(file)
-			QuizingLibrary.QMaker.start(quiz)
+			if temp == None:
+				name = input("What will be the name of the file? ")
+				with open("{}.quiz".format(name), "w") as f:
+					json.dump({}, f, sort_keys = True)
+				with open("{}.quiz".format(name), "r") as f:
+					temp = json.load(f)
 
+			quiz = QuizingLibrary.QuizingCore.QuizCreateMode(temp)
+			QuizingLibrary.QuizingMaker.start(quiz)
+
+		# Play Quiz
 		elif action == "2" and file_exists:
-			quiz = QuizingLibrary.QCore.QuizPlayMode(file)
-			QuizingLibrary.QPlayer.start(quiz)
+			quiz = QuizingLibrary.QuizingCore.QuizPlayMode(temp)
+			QuizingLibrary.QuizingPlayer.start(quiz)
 
 		elif action == "3":
 			getpass.getpass("Press Enter to exit . . .")
@@ -52,9 +74,11 @@ try:
 	else:
 		# This sentence will probably get out sometime, but I will leave
 		# it here for debugging purpuses
-		print("You haven't inputed a file though drag'n'drop!\n")
+		print("You haven't inputed a valid file through drag'n'drop!\n")
+		getpass.getpass("Press Enter to exit . . . ")
+		sys.exit()
 except:
-	pass
+	print("You haven't inputed a file through drag'n'drop!")
 
 # In case the user doesn't provide any file the script
 # will search in the current directory
@@ -70,16 +94,18 @@ for filename in filenames:
 if valid_options == []:
 	print("There's no quiz file in the current directory")
 	print("You can drag and drop the file into the program")
-	print("or change it into here\n")
+	print("or change it into this directory.\n")
+	choose_path()
 elif len(valid_options) == 1:
 	print("You only have a quiz file in this directory")
 	print(valid_options[0])
+	choose_path(valid_options[0])
 else:
 	print("You have multiple quiz files")
 	print("Please choose one!")
+	option = 1
 	for file in valid_options:
-		option = 1
-		print("1. " + file)
+		print("{}. {}".format(option, file))
 		option += 1
 	while True:
 		try:
@@ -87,5 +113,5 @@ else:
 		except:
 			print("You must input a valid number!")
 			continue
-		if option =< len(valid_options):
+		if option <= len(valid_options):
 			choose_path(valid_options[option - 1])

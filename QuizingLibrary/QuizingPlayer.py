@@ -1,9 +1,8 @@
 # Script that will run the quiz
 
-import json
 import sys
 import getpass
-from QCore import QuizPlayMode
+from QuizingCore import QuizPlayMode
 from __init__ import CONST_version_number
 
 # These modules are in try/except statements to prevent errors from hapening 
@@ -11,21 +10,17 @@ from __init__ import CONST_version_number
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    print("\nAn error occured while importing colorama.")
-    print("Please be sure that you have colorama instaled using pip.")
-    print("Error:\n\n", e)
-    getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
+    os.system("pip install colorama")
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
+
+print(Style.BRIGHT + "Welcome to the Quiz Runner!")
 
 # Variable to hold the quiz
 quiz = None
 
 def main():
-    print(Style.BRIGHT + "Welcome to the Quiz Runner!")
-
     while True:
         print("What do you want to do?")
         print("1. Play {}".format(quiz.name))
@@ -33,9 +28,11 @@ def main():
 
         action = input()
 
+        # Play quiz
         if action == "1":
             quiz.play()
 
+        # Exit
         elif action == "2":
             getpass.getpass("Press Enter to exit . . .")
             sys.exit()

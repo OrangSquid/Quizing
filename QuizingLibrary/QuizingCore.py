@@ -3,18 +3,15 @@
 
 import string
 import getpass
-from __init__ import *
+import os
+from __init__ import CONST_version_number
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    print("\nAn error occured while importing colorama.")
-    print("Please be sure that you have colorama instaled using pip.")
-    print("Error:\n\n", e)
-    getpass.getpass("Press Enter to exit . . . ")
-    sys.exit()
+    os.system("pip install colorama")
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
@@ -24,55 +21,58 @@ alpha_order = dict(enumerate(string.ascii_uppercase, 1))
 
 # Base Class for the CreateMode and PlayMode
 class Quiz():
-    def __init__(self, name, questions, correct_answers):
+    def __init__(self, name, questions, correct_answers, quiz_ver):
         self.name = name
         self.questions = questions
         self.correct_answers = correct_answers
-        self.CONST_version_number = "a0.1"
+        self.quiz_ver = quiz_ver
 
 # Class Used in QuizMaker.py
 class QuizCreateMode(Quiz):
     def __init__(self, name, questions, correct_answers, settings):
         super().__init__(name, questions, correct_answers)
         self.settings = settings
+        self.change = self.change()
 
     # Methods for changing the settings of the quiz
     # Every method that starts with "change__" is about changing the settings of the quiz
-    def change__number_options(self):
-        print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
-        try:
-            self.settings["default options"] = int(input("How many options do you want then?"))
-        except:
-            print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
-            self.change_settings.number_options()
-        print("The default number of options was changed successfully!")
+    class change():
 
-    def change__name(self):
-        self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
-        print("Name changed successfully!")
+        def number_options(self):
+            print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
+            try:
+                self.settings["default options"] = int(input("How many options do you want then?"))
+            except:
+                print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
+                self.change_settings.number_options()
+            print("The default number of options was changed successfully!")
 
-    def change__scoring(self, option):
-        if option == "1":
-            while True:
-                print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
-                try:
-                    self.settings["question points"][0] = int(input("How many points should the player get?"))
-                    break
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                    continue
-                print("Scoring system changed successufully!")
-                return
+        def name(self):
+            self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
+            print("Name changed successfully!")
 
-        elif action == "2":
-            while True:
-                print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
-                try:
-                    self.settings["question points"][0] = int(input("How many points should the player get?"))
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                    continue
-                print("Scoring system changed successufully!")
+        def scoring(self, option):
+            if option == "1":
+                while True:
+                    print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
+                    try:
+                        self.settings["question points"][0] = int(input("How many points should the player get?"))
+                        break
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                        continue
+                    print("Scoring system changed successufully!")
+                    return
+
+            elif action == "2":
+                while True:
+                    print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
+                    try:
+                        self.settings["question points"][0] = int(input("How many points should the player get?"))
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                        continue
+                    print("Scoring system changed successufully!")
 
     # Method for printing the quiz
     def __str__(self):
@@ -148,7 +148,12 @@ class QuizPlayMode(Quiz):
         self.right = 0
         
     def play(self):
-        if self.quiz_ver == CONST_version_number
+        # Check if quiz can be played
+        if self.quiz_ver != CONST_version_number:
+            print("This .quiz file is incompatible with this script!")
+            print("Please use the version of the script that made this quiz.\n")
+            getpass.getpass("Press Enter to exit . . .")
+            sys.exit()
 
         print("Let's play!")
         number = 1
@@ -166,7 +171,6 @@ class QuizPlayMode(Quiz):
                     if "Option" in y[0]:
                         if y[0][7] == answer:
                             print(Fore.GREEN + "{}. {}".format(y[0], y[1]))
-
                         else:
                             print("{}. {}".format(y[0], y[1]))
 
@@ -187,7 +191,9 @@ class QuizPlayMode(Quiz):
                             print ("{}. {}".format(y[0], y[1]))
                 print("You're wrong! You get {} points\n".format(self.scoring[0]))
                 self.points += self.scoring[0]
+
             number += 1
+        print(Style.BRIGHT + "FINISH!")
         print("You got {} answers right and {} points\n".format(self.right, self.points))
 
 # Hello me from the future!
