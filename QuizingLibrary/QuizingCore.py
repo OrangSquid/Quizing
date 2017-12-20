@@ -1,17 +1,18 @@
 # As the name suggets, this is the core of the quizing project
 # It contains the classes and the methods to play and create the quizes
 
+# Script to handle 
+
 import string
 import getpass
 import os
-from __init__ import CONST_version_number
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    os.system("pip install colorama")
+    install_modules()
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
@@ -21,13 +22,12 @@ alpha_order = dict(enumerate(string.ascii_uppercase, 1))
 
 # Base Class for the CreateMode and PlayMode
 class Quiz():
-    def __init__(self, name, questions, correct_answers, quiz_ver):
+    def __init__(self, name, questions, correct_answers):
         self.name = name
         self.questions = questions
         self.correct_answers = correct_answers
-        self.quiz_ver = quiz_ver
 
-# Class Used in QuizMaker.py
+# Class Used in QuizingMaker.py
 class QuizCreateMode(Quiz):
     def __init__(self, name, questions, correct_answers, settings):
         super().__init__(name, questions, correct_answers)
@@ -114,7 +114,7 @@ class QuizCreateMode(Quiz):
                 print(Fore.RED + Style.BRIGHT + "You must input the letter of the correct option!")
                 continue
             break
-        self.questions["question " + str(len(self.questions) + 1)] = question_temp
+        self.questions[str(len(self.questions) + 1)] = question_temp
         self.correct_answers.append(correct)
 
     # Method for deleting a question
@@ -138,6 +138,7 @@ class QuizCreateMode(Quiz):
         self.name = input("What's the name of this quiz?\n")
         print("Setup successfull!")
 
+# Class used in QuizingPlayer.py
 class QuizPlayMode(Quiz):
     def __init__(self, name, questions, correct_answers, settings):
         super().__init__(name, questions, correct_answers)
@@ -148,13 +149,6 @@ class QuizPlayMode(Quiz):
         self.right = 0
         
     def play(self):
-        # Check if quiz can be played
-        if self.quiz_ver != CONST_version_number:
-            print("This .quiz file is incompatible with this script!")
-            print("Please use the version of the script that made this quiz.\n")
-            getpass.getpass("Press Enter to exit . . .")
-            sys.exit()
-
         print("Let's play!")
         number = 1
         for x in self.questions.values():
@@ -195,6 +189,8 @@ class QuizPlayMode(Quiz):
             number += 1
         print(Style.BRIGHT + "FINISH!")
         print("You got {} answers right and {} points\n".format(self.right, self.points))
+
+# RANTS AND WISHES DOWN BELOW
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do

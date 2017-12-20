@@ -2,25 +2,20 @@
 
 import sys
 import getpass
-from QuizingCore import QuizPlayMode
-from __init__ import CONST_version_number
 
 # These modules are in try/except statements to prevent errors from hapening 
 # Since they don't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    os.system("pip install colorama")
+	install_modules()
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
-print(Style.BRIGHT + "Welcome to the Quiz Runner!")
+def start_play(quiz):
+	print(Style.BRIGHT + "Welcome to the Quiz Runner!")
 
-# Variable to hold the quiz
-quiz = None
-
-def main():
     while True:
         print("What do you want to do?")
         print("1. Play {}".format(quiz.name))
@@ -39,12 +34,8 @@ def main():
 
         else:
             print("You must input a 1 or 2!\n")
-            continue
 
-# I want to make sure you first pass through QuizingProject.py (which has the functionaltiy to open the file and
-# handle it to the Maker and Player)
-if __name__ == "__main__":
-    sys.exit(-1)
+# RANTS AND WISHES DOWN BELOW
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do

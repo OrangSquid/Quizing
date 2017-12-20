@@ -5,14 +5,14 @@ import os
 import sys
 import getpass
 import json
-import QuizingLibrary
+import QuizingLibrary as QL
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    os.system("pip install colorama")
+	QuizingLibrary.install_modules()
 
 print(Style.BRIGHT + "Welcome to the Quizing Project!\n")
 
@@ -38,6 +38,7 @@ def choose_path(*file):
 		print()
 
 	while True:
+		print(temp)
 		action = input()
 
 		# Make or Edit Quiz
@@ -49,21 +50,23 @@ def choose_path(*file):
 				with open("{}.quiz".format(name), "r") as f:
 					temp = json.load(f)
 
-			quiz = QuizingLibrary.QuizingCore.QuizCreateMode(temp)
-			QuizingLibrary.QuizingMaker.start(quiz)
+			quiz = QL.QuizingCore.QuizCreateMode(temp)
+			del temp
+			QL.QuizingMaker.start_edit(quiz)
 
 		# Play Quiz
 		elif action == "2" and file_exists:
-			quiz = QuizingLibrary.QuizingCore.QuizPlayMode(temp)
-			QuizingLibrary.QuizingPlayer.start(quiz)
+			quiz = QL.QuizingCore.QuizPlayMode(temp)
+			del temp
+			QL.QuizingPlayer.start_play(quiz)
 
+		# Exit
 		elif action == "3":
 			getpass.getpass("Press Enter to exit . . .")
 			sys.exit()
 
 		else:
 			print("You must input a valid number!")
-			continue
 
 # Checks if user has inputed a file through drag'n'drop
 # or opened it directly

@@ -2,22 +2,18 @@
 
 import sys
 import getpass
-from QuizingCore import QuizCreateMode
-from __init__ import CONST_version_number
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    os.system("pip install colorama")
+    install_modules()
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
-
-print(Style.BRIGHT + "Welcome to the Quiz Maker!")
     
-def main(quiz):
+def start_edit(quiz):
     print(Style.BRIGHT + "Welcome to the Quiz Maker!")
     print("What do you want to do?")
     print()
@@ -85,7 +81,7 @@ def main(quiz):
     # Check quiz
     elif action == "2":
         print(quiz)
-        main()
+        main(quiz)
 
     # Add question
     elif action == "3":
@@ -94,7 +90,7 @@ def main(quiz):
             action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(self.settings["default options"])).upper()
             if action == "Y":
                 self.add_question(self.settings["default options"], question)
-                main()
+                main(quiz)
             elif action == "N":
                 while True:
                     try:
@@ -110,12 +106,12 @@ def main(quiz):
                 quiz.add_question(options, question)
                 del options
                 del question
-                main()
+                main(quiz)
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
         #Reason #1
-        main()
+        main(quiz)
         
     # Delete question
     elif action == "4":
@@ -129,7 +125,7 @@ def main(quiz):
         quiz.delete_question(number)
         del number
         # Reason #1
-        main()
+        main(quiz)
         
     # Exit and save
     elif action == "5":
@@ -144,12 +140,9 @@ def main(quiz):
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
         # Reason #1
-        main()
+        main(quiz)
 
-# I want to make sure you first pass through QuizingProject.py (which has the functionaltiy to open the file and
-# handle it to the Maker and Player)
-if __name__ == "__main__":
-    sys.exit(-1)
+# RANTS AND WISHES DOWN BELOW
 
 # Hello me from the future!
 # I just wanted to tell you that this project took you a while to do
