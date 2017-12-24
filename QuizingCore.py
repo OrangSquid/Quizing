@@ -29,7 +29,7 @@ class Quiz():
 
 # Class Used in QuizingMaker.py
 class QuizCreateMode(Quiz):
-    def __init__(self, name, questions, correct_answers, settings):
+    def __init__(self, name, settings, questions, correct_answers):
         super().__init__(name, questions, correct_answers)
         self.settings = settings
         self.change = self.change()
@@ -127,7 +127,7 @@ class QuizCreateMode(Quiz):
     def set_settings(self):
         try:
             self.settings["default options"] = int(input("How many options will be the default number?\n"))
-            while self.settings["default options"] >= 26 or self.settings["default options"] <= 3:
+            while self.settings["default options"] >= 26 or self.settings["default options"] <= 1:
                 self.settings["default options"] = int(input("The number must be between 2 and 26! "))
             w = int(input("How many points should the player get for each wrong answer?\n"))
             r = int(input("How many points should the player get for each right answer?\n"))
@@ -140,7 +140,7 @@ class QuizCreateMode(Quiz):
 
 # Class used in QuizingPlayer.py
 class QuizPlayMode(Quiz):
-    def __init__(self, name, questions, correct_answers, settings):
+    def __init__(self, name, settings, questions, correct_answers):
         super().__init__(name, questions, correct_answers)
         self.scoring = settings["scoring"]
         # Variable to hold the number of points the player has got and
@@ -189,6 +189,11 @@ class QuizPlayMode(Quiz):
             number += 1
         print(Style.BRIGHT + "FINISH!")
         print("You got {} answers right and {} points\n".format(self.right, self.points))
+
+if __name__ == "__main__":
+    import sys
+    input("Please use QuizingProject to start!")
+    sys.exit(-1)
 
 # RANTS AND WISHES DOWN BELOW
 

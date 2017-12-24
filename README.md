@@ -10,7 +10,6 @@ The .quiz file is pretty much a JSON file with a different extension.
 It has this format:
 ```json
 {
-	"quiz_ver" : "Version of the script that made the quiz",
 	"name" : "Name of the quiz",
 	"settings" : {
 		"default_options" : "Default number of options for quick acess when editing quiz",
@@ -28,6 +27,7 @@ It has this format:
 			"Option A" : "Option Example",
 			"..." : "..."
 		}
-	}
+	},
+	"correct_answers" : ["A", "..."]
 }
 ```

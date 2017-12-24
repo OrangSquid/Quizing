@@ -2,19 +2,23 @@
 
 import sys
 import getpass
+import json
 
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-    install_modules()
+    import os
+    print("Please wait while we install neccessary modules")
+    os.system("pip install colorama")
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
     
 def start_edit(quiz):
-    print(Style.BRIGHT + "Welcome to the Quiz Maker!")
+
+    print(Style.BRIGHT + "Welcome to the Quiz Editor!")
     print("What do you want to do?")
     print()
     print("1. Change quiz settings")
@@ -141,6 +145,11 @@ def start_edit(quiz):
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
         # Reason #1
         main(quiz)
+
+if __name__ == "__main__":
+    input("Please use QuizingProject to start!")
+    sys.exit(-1)
+
 
 # RANTS AND WISHES DOWN BELOW
 

@@ -8,13 +8,15 @@ import getpass
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-	install_modules()
+    import os
+    print("Please wait while we install neccessary modules")
+    os.system("pip install colorama")
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
 def start_play(quiz):
-	print(Style.BRIGHT + "Welcome to the Quiz Runner!")
+    print(Style.BRIGHT + "Welcome to the Quiz Player!")
 
     while True:
         print("What do you want to do?")
@@ -34,6 +36,10 @@ def start_play(quiz):
 
         else:
             print("You must input a 1 or 2!\n")
+
+if __name__ == "__main__":
+    input("Please use QuizingProject to start!")
+    sys.exit(-1)
 
 # RANTS AND WISHES DOWN BELOW
 
