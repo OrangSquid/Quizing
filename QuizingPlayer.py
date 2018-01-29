@@ -38,8 +38,8 @@ def start_play(quiz):
             print("You must input a 1 or 2!\n")
 
 if __name__ == "__main__":
-    input("Please use QuizingProject to start!")
-    sys.exit(-1)
+    input("Please use QuizingProject to start! Press Enter . . . ")
+    sys.exit(0)
 
 # RANTS AND WISHES DOWN BELOW
 

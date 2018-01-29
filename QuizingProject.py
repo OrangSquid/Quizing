@@ -14,7 +14,6 @@ import QuizingPlayer as QP
 try:
     from colorama import *
 except ModuleNotFoundError as e:
-	import os
 	print("Please wait while we install neccessary modules")
 	os.system("pip install colorama")
 
@@ -26,7 +25,6 @@ print(Style.BRIGHT + "Welcome to the Quizing Project!\n")
 def main():
 
 	def choose_path(*file):
-		temp = None
 		try:
 			with open(file[0], "r") as f:
 				temp = json.load(f)
@@ -37,13 +35,13 @@ def main():
 			file_exists = False
 			print("Would you like to:\n")
 			print("1. Make a Quiz")
-			print("3. Exit")
+			print(Fore.RED + Style.BRIGHT + "3. Exit")
 		else:
 			file_exists = True
 			print("Would you like to:\n")
 			print("1. Edit the Quiz")
 			print("2. Play the Quiz")
-			print("3. Exit")
+			print(Fore.RED + Style.BRIGHT + "3. Exit")
 			print()
 
 		while True:
@@ -51,7 +49,7 @@ def main():
 
 			# Make or Edit Quiz
 			if action == "1":
-				if temp == None:
+				if not file_exists:
 					name = input("What will be the name of the file? ")
 					with open("{}.quiz".format(name), "w") as f:
 						json.dump(
@@ -66,7 +64,7 @@ def main():
 				else:
 					quiz = QC.QuizCreateMode(temp["name"], temp["settings"], temp["questions"], temp["correct_answers"])
 				del temp
-				QE.start_edit(quiz)
+				QE.start_edit(quiz, file[0])
 
 			# Play Quiz
 			elif action == "2" and file_exists:
@@ -124,14 +122,15 @@ def main():
 		for file in valid_options:
 			print("{}. {}".format(option, file))
 			option += 1
+		del option
 		while True:
 			try:
-				option = int(input())
+				c_option = int(input())
 			except:
 				print("You must input a valid number!")
 				continue
-			if option <= len(valid_options):
-				choose_path(valid_options[option - 1])
+			if c_option <= len(valid_options):
+				choose_path(valid_options[c_option - 1])
 
 if __name__ == "__main__":
 	main()

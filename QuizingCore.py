@@ -1,14 +1,10 @@
 # As the name suggets, this is the core of the quizing project
 # It contains the classes and the methods to play and create the quizes
 
-# Script to handle 
-
 import string
 import getpass
 import os
 
-# This module is in a try/except statement to prevent errors from hapening 
-# Since it doesn't belong to the standard library
 try:
     from colorama import *
 except ModuleNotFoundError as e:
@@ -32,52 +28,47 @@ class QuizCreateMode(Quiz):
     def __init__(self, name, settings, questions, correct_answers):
         super().__init__(name, questions, correct_answers)
         self.settings = settings
-        self.change = self.change()
 
-    # Methods for changing the settings of the quiz
-    # Every method that starts with "change__" is about changing the settings of the quiz
-    class change():
+    def change_number_options(self):
+        print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
+        try:
+            self.settings["default_options"] = int(input("How many options do you want then?"))
+        except:
+            print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
+            self.change.number_options()
+        print("The default number of options was changed successfully!")
 
-        def number_options(self):
-            print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
-            try:
-                self.settings["default options"] = int(input("How many options do you want then?"))
-            except:
-                print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
-                self.change_settings.number_options()
-            print("The default number of options was changed successfully!")
+    def change_name(self):
+        self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
+        print("Name changed successfully!")
 
-        def name(self):
-            self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
-            print("Name changed successfully!")
+    def change_scoring(self, option):
+        if option == "1":
+            while True:
+                print("Right now, for each wrong question you get {}.".format(self.settings["scoring"][0]))
+                try:
+                    self.settings["scoring"][0] = int(input("How many points should the player get?"))
+                    break
+                except:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                    continue
+                print("Scoring system changed successufully!")
+                return
 
-        def scoring(self, option):
-            if option == "1":
-                while True:
-                    print("Right now, for each wrong question you get {}.".format(self.settings["question points"][0]))
-                    try:
-                        self.settings["question points"][0] = int(input("How many points should the player get?"))
-                        break
-                    except:
-                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                        continue
-                    print("Scoring system changed successufully!")
-                    return
-
-            elif action == "2":
-                while True:
-                    print("Right now, for each right question you get {}.".format(self.settings["question points"][1]))
-                    try:
-                        self.settings["question points"][0] = int(input("How many points should the player get?"))
-                    except:
-                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                        continue
-                    print("Scoring system changed successufully!")
+        elif action == "2":
+            while True:
+                print("Right now, for each right question you get {}.".format(self.settings["scoring"][1]))
+                try:
+                    self.settings["scoring"][0] = int(input("How many points should the player get?"))
+                except:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                    continue
+                print("Scoring system changed successufully!")
 
     # Method for printing the quiz
     def __str__(self):
         print("These are the quiz settings\n")
-        print("Default number question optitions: {}".format(self.settings["default options"]))
+        print("Default number question optitions: {}".format(self.settings["default_options"]))
         print("Wrong Answer points: {}".format(self.settings["scoring"][0]))
         print("Right Answer points: {}".format(self.settings["scoring"][1]))
     
@@ -101,7 +92,7 @@ class QuizCreateMode(Quiz):
     
     # Method for adding a question
     def add_question(self, number, question):
-        question_temp = {"question": question}
+        question_temp = {"Question": question}
         for x in range(1, number + 1):
             question_temp["Option " +  alpha_order[x]] = input("Option " + alpha_order[x] + ". ")
         while True:
@@ -126,18 +117,22 @@ class QuizCreateMode(Quiz):
     # Method for setting the settings
     def set_settings(self):
         try:
-            self.settings["default options"] = int(input("How many options will be the default number?\n"))
-            while self.settings["default options"] >= 26 or self.settings["default options"] <= 1:
-                self.settings["default options"] = int(input("The number must be between 2 and 26! "))
+            self.settings["default_options"] = int(input("How many options will be the default number?\n"))
+            while self.settings["default_options"] >= 26 or self.settings["default_options"] <= 1:
+                self.settings["default_options"] = int(input("The number must be between 2 and 26! "))
             w = int(input("How many points should the player get for each wrong answer?\n"))
             r = int(input("How many points should the player get for each right answer?\n"))
         except:
             print(Fore.RED + Style.BRIGHT + "You must input a number!")
             self.set_settings()
         self.settings["scoring"] = [w, r]
+        del w
+        del r
         self.name = input("What's the name of this quiz?\n")
         print("Setup successfull!")
 
+# FOR THE LOVE OF GOD, DO NOT TOUCH THIS CLASS. IT'S DONE, IT'S TURING COMPLETE,
+# IT'S PERFECT, WHATEVER YOU WANT TO CALL IT. JUST DO NOT TOUCH IT
 # Class used in QuizingPlayer.py
 class QuizPlayMode(Quiz):
     def __init__(self, name, settings, questions, correct_answers):
@@ -192,8 +187,8 @@ class QuizPlayMode(Quiz):
 
 if __name__ == "__main__":
     import sys
-    input("Please use QuizingProject to start!")
-    sys.exit(-1)
+    input("Please use QuizingProject to start! Press Enter . . . ")
+    sys.exit(0)
 
 # RANTS AND WISHES DOWN BELOW
 
@@ -204,7 +199,11 @@ if __name__ == "__main__":
 # I hope you're having a great time and wish you the best of luck!
 
 # UPDATE: Hi me from the past and the future, this code is a mess and right now I'm fixing it
-# I won't fix everything (obviously), but probably the me from the future will fix it. Right now is 7th November 2017, 20h51
+# I won't fix everything (obviously), but probably the me from the future will fix it. 
+# Right now is 7th November 2017, 20h51
+
+# UPDATE 2: Both of you can die in hell for not fixing the bugs while you could. "No, Rafa from the future can do it"
+# Fuck you!
 
 # * Why the fuck didn't you first commented this
 # I have been staring at this for a whole 10 minutes

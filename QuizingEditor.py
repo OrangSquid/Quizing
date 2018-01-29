@@ -16,7 +16,7 @@ except ModuleNotFoundError as e:
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
     
-def start_edit(quiz):
+def start_edit(quiz, file):
 
     print(Style.BRIGHT + "Welcome to the Quiz Editor!")
     print("What do you want to do?")
@@ -40,16 +40,16 @@ def start_edit(quiz):
             print("3. Scoring system")
             print(Fore.RED + Style.BRIGHT + "4. Return\n")
 
-            action == input()
+            action = input()
 
             # Default number of options
             if action == "1":
-                quiz.change.number_options()
+                quiz.change_number_options()
                 break
 
             # Name of the quiz
             elif action == "2":
-                quiz.change.name()
+                quiz.change_name()
                 break
 
             # Scoring system
@@ -64,7 +64,7 @@ def start_edit(quiz):
                     action = input()
 
                     if action == "1" or action == "2":
-                        quiz.change.scoring(action)
+                        quiz.change_scoring(action)
                         break
                     else:
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
@@ -80,21 +80,21 @@ def start_edit(quiz):
                 continue
             
         # Reason #1
-        main()
+        start_edit(quiz, file)
 
     # Check quiz
     elif action == "2":
         print(quiz)
-        main(quiz)
+        start_edit(quiz, file)
 
     # Add question
     elif action == "3":
         question = input("What's the question?\n\n")
         while True:
-            action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(self.settings["default options"])).upper()
+            action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(quiz.settings["default_options"])).upper()
             if action == "Y":
-                self.add_question(self.settings["default options"], question)
-                main(quiz)
+                quiz.add_question(quiz.settings["default_options"], question)
+                start_edit(quiz, file)
             elif action == "N":
                 while True:
                     try:
@@ -110,12 +110,12 @@ def start_edit(quiz):
                 quiz.add_question(options, question)
                 del options
                 del question
-                main(quiz)
+                start_edit(quiz, file)
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
         #Reason #1
-        main(quiz)
+        start_edit(quiz, file)
         
     # Delete question
     elif action == "4":
@@ -129,26 +129,26 @@ def start_edit(quiz):
         quiz.delete_question(number)
         del number
         # Reason #1
-        main(quiz)
+        start_edit(quiz, file)
         
     # Exit and save
     elif action == "5":
-        with open(r"C:\Users\rafae\Desktop\quiz.quiz", "w") as f:
+        with open(file, "w") as f:
             json.dump({"name": quiz.name, 
                         "settings": quiz.settings, 
                         "questions": quiz.questions, 
-                        "correct_answers": quiz.correct_answers}, f)
+                        "correct_answers": quiz.correct_answers}, f, indent="\t")
             getpass.getpass("Press Enter to exit . . .")
             sys.exit()
 
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
         # Reason #1
-        main(quiz)
+        start_edit(quiz, file)
 
 if __name__ == "__main__":
-    input("Please use QuizingProject to start!")
-    sys.exit(-1)
+    input("Please use QuizingProject to start! Press Enter . . . ")
+    sys.exit(0)
 
 
 # RANTS AND WISHES DOWN BELOW
