@@ -147,24 +147,3 @@ def start_edit(quiz, file):
 
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
-    sys.exit(0)
-
-
-# RANTS AND WISHES DOWN BELOW
-
-# Hello me from the future!
-# I just wanted to tell you that this project took you a while to do
-# And if you find it stupid, clutered or innefecient, you're free to change it
-# I'm writting this on the 8th September, 2017, 13h48m and I still haven't finished it
-# I hope you're having a great time and wish you the best of luck!
-
-# UPDATE: Hi me from the past and the future, this code is a mess and right now I'm fixing it
-# I won't fix everything (obviously), but probably the me from the future will fix it. Right now is 7th November 2017, 20h51
-
-# To stop reapiting the same reasons over and over, I made a list so that
-# You can refer to here
-
-# Reason #1
-# This is in the middle of nowhere to make sure that after
-# The user is done with this operation it returns right back into the main action "asker"
-# (I couldn't come up with a better name)
