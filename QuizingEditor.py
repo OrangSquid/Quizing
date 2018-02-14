@@ -79,7 +79,6 @@ def start_edit(quiz, file):
                 print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
                 continue
             
-        # Reason #1
         start_edit(quiz, file)
 
     # Check quiz
