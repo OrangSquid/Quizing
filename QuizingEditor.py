@@ -113,7 +113,6 @@ def start_edit(quiz, file):
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
-        #Reason #1
         start_edit(quiz, file)
         
     # Delete question
@@ -127,7 +126,6 @@ def start_edit(quiz, file):
                 continue
         quiz.delete_question(number)
         del number
-        # Reason #1
         start_edit(quiz, file)
         
     # Exit and save
@@ -142,7 +140,6 @@ def start_edit(quiz, file):
 
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
-        # Reason #1
         start_edit(quiz, file)
 
 if __name__ == "__main__":
