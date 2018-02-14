@@ -1,5 +1,3 @@
-# Script that will run the quiz
-
 import sys
 import getpass
 
@@ -39,12 +37,3 @@ def start_play(quiz):
 
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
-    sys.exit(0)
-
-# RANTS AND WISHES DOWN BELOW
-
-# Hello me from the future!
-# I just wanted to tell you that this project took you a while to do
-# And if you find it stupid, clutered or innefecient, you're free to change it
-# I'm writting this on the 8th September, 2017, 13h48m and I still haven't finished it
-# I hope you're having a great time and wish you the best of luck!
