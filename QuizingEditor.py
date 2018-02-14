@@ -1,5 +1,3 @@
-# Script that will make the quiz
-
 import sys
 import getpass
 import json

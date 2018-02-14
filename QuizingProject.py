@@ -9,7 +9,7 @@ import QuizingPlayer as QP
 # This module is in a try/except statement to prevent errors from hapening 
 # Since it doesn't belong to the standard library
 try:
-    from colorama import *
+	from colorama import *
 except ModuleNotFoundError as e:
 	print("Please wait while we install neccessary modules")
 	os.system("pip install colorama")
@@ -22,6 +22,7 @@ print(Style.BRIGHT + "Welcome to the Quizing Project!\n")
 def main():
 
 	def choose_path(*file):
+		"""Diretcs the user to either QuizingEditor.py or QuzingPlayer.py"""
 		try:
 			with open(file[0], "r") as f:
 				temp = json.load(f)
@@ -53,21 +54,30 @@ def main():
 							{"name" : name,
 							"settings" : {},
 							"questions" : {},
-							"correct_answers" : []}, f)
+							"correct_answers" : []}, f, ident = "\t")
 					with open("{}.quiz".format(name), "r") as f:
 						temp = json.load(f)
-					quiz = QC.QuizCreateMode(temp["name"], temp["settings"], temp["questions"], temp["correct_answers"])
+					quiz = QC.QuizCreateMode(temp["name"], 
+											 temp["settings"], 
+											 temp["questions"], 
+											 temp["correct_answers"])
 					quiz.set_settings()
 				else:
-					quiz = QC.QuizCreateMode(temp["name"], temp["settings"], temp["questions"], temp["correct_answers"])
-				del temp
+					quiz = QC.QuizCreateMode(temp["name"], 
+											 temp["settings"], 
+											 temp["questions"], 
+											 temp["correct_answers"])
 				QE.start_edit(quiz, file[0])
+				sys.exit()
 
 			# Play Quiz
 			elif action == "2" and file_exists:
-				quiz = QC.QuizPlayMode(temp["name"], temp["settings"], temp["questions"], temp["correct_answers"])
-				del temp
+				quiz = QC.QuizPlayMode(temp["name"], 
+									   temp["settings"], 
+									   temp["questions"], 
+									   temp["correct_answers"])
 				QP.start_play(quiz)
+				sys.exit()
 
 			# Exit
 			elif action == "3":
@@ -77,57 +87,51 @@ def main():
 			else:
 				print("You must input a valid number!")
 
-	# Checks if user has inputed a file through drag'n'drop
-	# or opened it directly
 	try:
-		if os.path.isfile(sys.argv[1]) and sys.argv[1].endswith(".quiz"):
-			print("You have inputed a valid file!\n")
-			choose_path(sys.argv[1])
+		file = " ".join(sys.argv[1:])
+		if os.path.isfile(file) and file.endswith(".quiz"):
+			print("File detected through console argument\n")
+			choose_path(file)
+			sys.exit()
 		else:
-			# This sentence will probably get out sometime, but I will leave
-			# it here for debugging purpuses
-			print("You haven't inputed a valid file through drag'n'drop!\n")
+			print("Invalid file in console argument!\n")
 			getpass.getpass("Press Enter to exit . . . ")
 			sys.exit()
 	except:
-		print("You haven't inputed a file through drag'n'drop!")
+		# In case the user doesn't provide any file the script
+		# will search in the current directory
+		print(os.curdir)
+		filenames = os.listdir(os.curdir)
 
-	# In case the user doesn't provide any file the script
-	# will search in the current directory
-	filenames = os.listdir(os.curdir)
+		valid_options = []
 
-	valid_options = []
+		# Checks if file has a valid extension
+		for filename in filenames:
+			if os.path.isfile(filename) and filename.endswith(".quiz"):
+				valid_options.append(filename)
 
-	# Checks if file has a valid extension
-	for filename in filenames:
-	    if os.path.isfile(filename) and filename.endswith(".quiz"):
-	    	valid_options.append(filename)
-
-	if valid_options == []:
-		print("There's no quiz file in the current directory")
-		print("You can drag and drop the file into the program")
-		print("or change it into this directory.\n")
-		choose_path()
-	elif len(valid_options) == 1:
-		print("You only have a quiz file in this directory")
-		print(valid_options[0])
-		choose_path(valid_options[0])
-	else:
-		print("You have multiple quiz files")
-		print("Please choose one!")
-		option = 1
-		for file in valid_options:
-			print("{}. {}".format(option, file))
-			option += 1
-		del option
-		while True:
-			try:
-				c_option = int(input())
-			except:
-				print("You must input a valid number!")
-				continue
-			if c_option <= len(valid_options):
-				choose_path(valid_options[c_option - 1])
+		if valid_options == []:
+			print("No file detected")
+			choose_path()
+		elif len(valid_options) == 1:
+			print("File detected in current directory: ")
+			print(valid_options[0])
+			choose_path(valid_options[0])
+		else:
+			print("Multiple files detected in current directory")
+			print("Please choose one!")
+			option = 1
+			for file in valid_options:
+				print("{}. {}".format(option, file))
+				option += 1
+			while True:
+				try:
+					c_option = int(input())
+				except:
+					print("You must input a valid number!")
+					continue
+				if c_option <= len(valid_options):
+					choose_path(valid_options[c_option - 1])
 
 if __name__ == "__main__":
 	main()
