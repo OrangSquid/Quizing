@@ -1,6 +1,3 @@
-# As the name suggets, this is the core of the quizing project
-# It contains the classes and the methods to play and create the quizes
-
 import string
 import getpass
 import os
@@ -13,17 +10,16 @@ except ModuleNotFoundError as e:
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
-# Dicitonary to quiz options
+# Dicitonary to hold alphabet for quiz options
 alpha_order = dict(enumerate(string.ascii_uppercase, 1))
 
-# Base Class for the CreateMode and PlayMode
 class Quiz():
     def __init__(self, name, questions, correct_answers):
         self.name = name
         self.questions = questions
         self.correct_answers = correct_answers
 
-# Class Used in QuizingMaker.py
+# Class Used in QuizingEditor.py
 class QuizCreateMode(Quiz):
     def __init__(self, name, settings, questions, correct_answers):
         super().__init__(name, questions, correct_answers)
@@ -90,7 +86,6 @@ class QuizCreateMode(Quiz):
                 number += 1
         return ""
     
-    # Method for adding a question
     def add_question(self, number, question):
         question_temp = {"Question": question}
         for x in range(1, number + 1):
@@ -108,13 +103,11 @@ class QuizCreateMode(Quiz):
         self.questions[str(len(self.questions) + 1)] = question_temp
         self.correct_answers.append(correct)
 
-    # Method for deleting a question
     def delete_question(self, number):
         for x in self.questions:
             if str(number) in x:
                 del x
 
-    # Method for setting the settings
     def set_settings(self):
         try:
             self.settings["default_options"] = int(input("How many options will be the default number?\n"))
@@ -126,19 +119,15 @@ class QuizCreateMode(Quiz):
             print(Fore.RED + Style.BRIGHT + "You must input a number!")
             self.set_settings()
         self.settings["scoring"] = [w, r]
-        del w
-        del r
         self.name = input("What's the name of this quiz?\n")
         print("Setup successfull!")
 
-# FOR THE LOVE OF GOD, DO NOT TOUCH THIS CLASS. IT'S DONE, IT'S TURING COMPLETE,
-# IT'S PERFECT, WHATEVER YOU WANT TO CALL IT. JUST DO NOT TOUCH IT
 # Class used in QuizingPlayer.py
 class QuizPlayMode(Quiz):
     def __init__(self, name, settings, questions, correct_answers):
         super().__init__(name, questions, correct_answers)
         self.scoring = settings["scoring"]
-        # Variable to hold the number of points the player has got and
+        # Variables to hold the number of points the player has got and
         # The number of questions the player got right
         self.points = 0
         self.right = 0
@@ -189,21 +178,6 @@ if __name__ == "__main__":
     import sys
     input("Please use QuizingProject to start! Press Enter . . . ")
     sys.exit(0)
-
-# RANTS AND WISHES DOWN BELOW
-
-# Hello me from the future!
-# I just wanted to tell you that this project took you a while to do
-# And if you find it stupid, clutered or innefecient, you're free to change it
-# I'm writting this on the 8th September, 2017, 13h48m and I still haven't finished it
-# I hope you're having a great time and wish you the best of luck!
-
-# UPDATE: Hi me from the past and the future, this code is a mess and right now I'm fixing it
-# I won't fix everything (obviously), but probably the me from the future will fix it. 
-# Right now is 7th November 2017, 20h51
-
-# UPDATE 2: Both of you can die in hell for not fixing the bugs while you could. "No, Rafa from the future can do it"
-# Fuck you!
 
 # * Why the fuck didn't you first commented this
 # I have been staring at this for a whole 10 minutes
