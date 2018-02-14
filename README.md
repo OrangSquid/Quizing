@@ -17,7 +17,7 @@ It has this format:
 	},
 	"questions" : {
 		"1" : {
-			"Question" : "How far is Earth from the Sun?",
+			"Question" : "How far is the Earth from the Sun?",
 			"Option A" : "150.000.000km",
 			"Option B" : "140.000.000km",
 			"Option C" : "130.000.000km"
