@@ -1,6 +1,3 @@
-# Script to handle file opening and starting 
-# (You need to get good at naming)
-
 import os
 import sys
 import getpass
