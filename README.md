@@ -18,7 +18,7 @@ It has this format:
         },
         "shuffle_questions": false,
         "shuffle_answers": false,
-        "timer": false
+        "timer": "0 equals no timer. Any other time above 10 seconds is valid. Input it in seconds"
     },
     "questions": [
         {
@@ -33,7 +33,7 @@ It has this format:
                     "correct": false
                 },
                 {
-                	"label": "130.000.000km",
+                	"option": "130.000.000km",
                 	"correct": false
                 }
             ]

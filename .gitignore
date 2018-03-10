@@ -1,2 +1,4 @@
 __pycache__
 .vs
+*.sublime-project
+*.sublime-workspace

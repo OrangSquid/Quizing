@@ -1,0 +1,33 @@
+{
+	"quiz ver": 1.0,
+	"name": "sample1",
+	"settings": {
+		"default_options": 3,
+		"scoring": {
+			"incorret": -5,
+			"correct": 10
+		},
+		"shuffle_questions": false,
+		"shuffle_answers": false,
+		"timer": 0
+	},
+	"questions": [
+		{
+			"question": "How far is Earth from the Sun?",
+			"answers": [
+				{
+					"option": "150.000.000km",
+					"correct": true
+				},
+				{
+					"option": "140.000.000km",
+					"correct": false
+				},
+				{
+					"Option C": "130.000.000km",
+					"correct": false
+				}
+			]
+		}
+	]
+}
