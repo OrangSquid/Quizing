@@ -42,7 +42,7 @@ It has this format:
         	"question": "Question example?",
         	"answers": [
         		{
-        			"option": "Example"
+        			"option": "Example",
         			"correct": true
         		}
         	]
