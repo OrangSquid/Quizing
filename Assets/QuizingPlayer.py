@@ -1,14 +1,6 @@
 import sys
 import getpass
-
-# These modules are in try/except statements to prevent errors from hapening 
-# Since they don't belong to the standard library
-try:
-    from colorama import *
-except ModuleNotFoundError as e:
-    import os
-    print("Please wait while we install neccessary modules")
-    os.system("pip install colorama")
+from colorama import *
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)

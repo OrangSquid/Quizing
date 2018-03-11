@@ -1,15 +1,6 @@
 import sys
 import getpass
-import json
-
-# This module is in a try/except statement to prevent errors from hapening 
-# Since it doesn't belong to the standard library
-try:
-    from colorama import *
-except ModuleNotFoundError as e:
-    import os
-    print("Please wait while we install neccessary modules")
-    os.system("pip install colorama")
+from colorama import *
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
@@ -31,12 +22,13 @@ def start_edit(quiz, file):
     if action == "1":
         # while loop to loop back if invalid number is inputed
         while True:
-            print("What setting do you want to change?")
-            print()
+            print("What setting do you want to change?\n")
             print("1. Default number of options")
             print("2. Name of the quiz")
             print("3. Scoring system")
-            print(Fore.RED + Style.BRIGHT + "4. Return\n")
+            print("4. Shuffling")
+            print("5. Timer")
+            print(Fore.RED + Style.BRIGHT + "6. Return\n")
 
             action = input()
 
@@ -53,8 +45,7 @@ def start_edit(quiz, file):
             # Scoring system
             elif action == "3":
                 while True:
-                    print("Do you want to change the wrong answer or right answer points?")
-                    print()
+                    print("Do you want to change the wrong answer or right answer points?\n")
                     print("1. Wrong")
                     print("2. Right")
                     print(Fore.RED + Style.BRIGHT + "3. Return\n")
@@ -68,8 +59,33 @@ def start_edit(quiz, file):
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
 
-            # Return
             elif action == "4":
+                while True:
+                    print("Do you want to change the shuffling for questions or answers?\n")
+                    print("1. Questions")
+                    print("2. Answers")
+                    print(Fore.RED + Style.BRIGHT + "3. Return\n")
+                      
+                    action = input()
+
+                    if action == "1" or action == "2":
+                        quiz.change_shuffling(action)
+                        break
+                    else:
+                        print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
+                        continue
+
+            elif action == "5":
+                while True:
+                    try:
+                        time = int(input("How much time do you want for the timer? (in seconds)"))
+                        quiz.change_timer(time)
+                        break
+                    except:
+                        print(Style.BRIGHT + Fore.RED + "You must input a number!")
+
+            # Return
+            elif action == "6":
                 getpass.getpass("Press Enter to return . . . ")
                 break
 
@@ -131,8 +147,7 @@ def start_edit(quiz, file):
         with open(file, "w") as f:
             json.dump({"name": quiz.name, 
                         "settings": quiz.settings, 
-                        "questions": quiz.questions, 
-                        "correct_answers": quiz.correct_answers}, f, indent="\t")
+                        "questions": quiz.questions}, f, indent="\t")
             getpass.getpass("Press Enter to exit . . .")
             sys.exit()
 
