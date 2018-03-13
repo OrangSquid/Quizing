@@ -9,7 +9,7 @@ The .quiz file is pretty much a JSON file with a different extension.
 It has this format:
 ```json
 {
-    "quiz ver": 1.0
+    "quiz ver": 1.0,
     "name": "Name of quiz",
     "settings": {
         "default_options": 4,
