@@ -10,16 +10,15 @@ init(autoreset = True)
 alpha_order = dict(enumerate(string.ascii_uppercase, 1))
 
 class Quiz():
-    def __init__(self, name, questions, correct_answers):
+    def __init__(self, name, questions, settings):
         self.name = name
         self.questions = questions
-        self.correct_answers = correct_answers
+        self.settings = settings
 
 # Class Used in QuizingEditor.py
-class QuizCreateMode(Quiz):
-    def __init__(self, name, settings, questions):
-        super().__init__(name, questions)
-        self.settings = settings
+class QuizEditMode(Quiz):
+    def __init__(self, name, questions, settings):
+        super().__init__(name, questions, settings)
 
     def change_number_options(self):
         print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
@@ -72,21 +71,24 @@ class QuizCreateMode(Quiz):
                 while temp != "y" or temp != "n":
                     temp = input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
                 if temp == "y":
-                    self.settings["shuffle_questions"] == not self.settings["shuffle_questions"]
+                    self.settings["shuffle_questions"] = not self.settings["shuffle_questions"]
             print("Shuffling system changed successufully!")
 
         else:
             while True:
-                if self.settings["shuffle_questions"]:
-                    print("Right now, the shuffling for questions is on")
+                if self.settings["shuffle_answers"]:
+                    print("Right now, the shuffling for answers is on")
                 else:
-                    print("Right now, the shuffling for questions is off")
+                    print("Right now, the shuffling for answers is off")
                 temp = input("Do you want to change it[Y/N]? ").lower()
                 while temp != "y" or temp != "n":
                     temp = input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
                 if temp == "y":
-                    self.settings["shuffle_questions"] == not self.settings["shuffle_questions"]
+                    self.settings["shuffle_answers"] = not self.settings["shuffle_answers"]
             print("Shuffling system changed successufully!")
+
+    def print_question(self, question):
+        pass
 
     # Method for printing the quiz
     def __str__(self):
@@ -94,23 +96,24 @@ class QuizCreateMode(Quiz):
         print("Default number question optitions: {}".format(self.settings["default_options"]))
         print("Wrong Answer points: {}".format(self.settings["scoring"]["incorrect"]))
         print("Right Answer points: {}".format(self.settings["scoring"]["correct"]))
+        print("Shuffling questions: {}".format(self.settings["shuffle_questions"]))
+        print("Shuffling answers: {}".format(self.settings["shuffle_answers"]))
+        print("Timer: {}".format(self.settings["timer"]))
     
-        if self.questions == {}:
+        if self.questions == []:
             print("There are currently no questions")
         else:
-            print("\nThese are the questions\n")
-            number = 1
-            for x in questions:
-                for y in zip(x.keys(), x.values()):
-                    if "question" in y[0]:
-                        print("{} {} : {}".format(y[0], number, y[1]))
+            counter_question = 1
+            counter_answers = 1
+            for x in self.questions:
+                print("\nQuestion {}: {}\n".format(counter_questions, x["question"]))
+                for y in x["answers"]:
+                    if y["correct"]:
+                        print(Style.BRIGHT + Fore.GREEN + "Option {}: {}".format(alpha_order[counter_answers - 1], y["option"]))
                     else:
-                        if self.correct_answers[number - 1] in y[0]:
-                            print(Fore.GREEN + "{}. {}".format(y[0], y[1]))
-                        else:
-                            print("{}. {}".format(y[0], y[1]))
-                print("", end = "\n")
-                number += 1
+                        print("Option {}: {}".format(alpha_order[counter_answers - 1], y["option"]))
+                    counter_answers += 1
+                counter_questions += 1
         return ""
     
     def add_question(self, number, question):
@@ -178,55 +181,49 @@ class QuizCreateMode(Quiz):
 
 # Class used in QuizingPlayer.py
 class QuizPlayMode(Quiz):
-    def __init__(self, name, settings, questions):
-        super().__init__(name, questions)
-        self.scoring = settings["scoring"]
-        # Variables to hold the number of points the player has got and
-        # The number of questions the player got right
-        self.points = 0
-        self.right = 0
+    def __init__(self, name, questions, settings):
+        super().__init__(name, questions, settings)
         
     def play(self):
         print("Let's play!")
-        number = 1
-        for x in self.questions.values():
-            for y in zip(x.keys(), x.values()):
-                if "Question" in y[0]:
-                    print ("{} {}: {}".format(y[0], number, y[1]))
+        if shuffle_questions:
+            pass
+        else:
+            counter_questions = 1
+            counter_answers = 1
+            for x in self.questions:
+                print("Question {}: {}\n".format(counter, x["question"]))
+                for y in x["answers"]:
+                    print("Option {}: {}".format(counter_answers - 1, y["option"]))
+                answer = input("\nAnd your answer is: ").upper()
+                print()
+
+                if x["answers"][alpha_order.index(answer)]["correct"]:
+                    for y in x["answers"]:
+                        if shit:
+                            pass
+
+                    print("\nYou're right! You get {} points\n".format(self.scoring["correct"]))
+                    self.points += self.settings["scoring"]["correct"]
+                    self.right += 1
+
                 else:
-                    print ("{}. {}".format(y[0], y[1]))
-            answer = input("\nAnd your answer is: ").upper()
-            print()
+                    for y in zip(x.keys(), x.values()):
+                        if "Option" in y[0]:
+                            if y[0][7] == answer:
+                                print(Styele.BRIGHT + Fore.RED + "{}. {}".format(y[0], y[1]))
 
-            if answer == self.correct_answers[number - 1]:
-                for y in zip(x.keys(), x.values()):
-                    if "Option" in y[0]:
-                        if y[0][7] == answer:
-                            print(Fore.GREEN + "{}. {}".format(y[0], y[1]))
-                        else:
-                            print("{}. {}".format(y[0], y[1]))
+                            elif y[0][7] == self.correct_answers[number - 1]:
+                                print(Style.BRIGHT + Fore.GREEN + "{}. {}".format(y[0], y[1]))
 
-                print("\nYou're right! You get {} points\n".format(self.scoring["correct"]))
-                self.points += self.scoring["correct"]
-                self.right += 1
+                            else:
+                                print ("{}. {}".format(y[0], y[1]))
+                    print("You're wrong! You get {} points\n".format(self.scoring["incorrect"]))
+                    self.points += self.scoring["incorrect"]
 
-            else:
-                for y in zip(x.keys(), x.values()):
-                    if "Option" in y[0]:
-                        if y[0][7] == answer:
-                            print(Fore.RED + "{}. {}".format(y[0], y[1]))
-
-                        elif y[0][7] == self.correct_answers[number - 1]:
-                            print(Fore.GREEN + "{}. {}".format(y[0], y[1]))
-
-                        else:
-                            print ("{}. {}".format(y[0], y[1]))
-                print("You're wrong! You get {} points\n".format(self.scoring["incorrect"]))
-                self.points += self.scoring["incorrect"]
-
-            number += 1
-        print(Style.BRIGHT + "END!")
-        print("You got {} answers right and {} points\n".format(self.right, self.points))
+                number += 1
+            print(Style.BRIGHT + "END!")
+            print("You got {} answers right and {} points\n".format(self.right, self.points))
 
 if __name__ == "__main__":
     import sys
