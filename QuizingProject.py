@@ -26,6 +26,10 @@ def main():
 		try:
 			with open(file[0], "r") as f:
 				temp = json.load(f)
+				try:
+					temp["quiz ver"]
+				except:
+					raise QuizFileVersionError("This quiz file is incompatible with this version. Please try a newer version of Quizing")
 		except:
 			# This is out of order to make sure it matches with the
 			# if statements below
@@ -57,6 +61,10 @@ def main():
 							"correct_answers" : []}, f, ident = "\t")
 					with open("{}.quiz".format(name), "r") as f:
 						temp = json.load(f)
+						try:
+							temp["quiz ver"]
+						except:
+							raise QuizFileVersionError("This quiz file is incompatible with this version. Please try a newer version of Quizing")
 					quiz = QC.QuizCreateMode(temp["name"], 
 											 temp["settings"], 
 											 temp["questions"], 
