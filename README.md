@@ -53,7 +53,7 @@ It has this format:
 }
 ```
 
-##The .xquiz file
+## The .xquiz file
 **NOTE**: The script still doesn't have support for this file
 The .xquiz file XML file with a different extension. 
 It has this format:
