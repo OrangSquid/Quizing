@@ -1,12 +1,14 @@
 import string
 import getpass
+import random
 from colorama import *
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
 
 # Dicitonary to hold alphabet for quiz options
-alpha_order = dict(enumerate(string.ascii_uppercase, 1))
+ALPHA_ORDER = dict(enumerate(string.ascii_uppercase, 1))
+REVERSE_ALPHA_ORDER = reverse_alpha_order = dict(zip(ALPHA_ORDER.values(), ALPHA_ORDER.keys()))
 
 class Quiz():
     def __init__(self, name, settings, questions):
@@ -28,15 +30,15 @@ class Quiz():
         if self.questions == []:
             print("There are currently no questions")
         else:
-            counter_question = 1
+            counter_questions = 1
             counter_answers = 1
             for x in self.questions:
                 print("\nQuestion {}: {}\n".format(counter_questions, x["question"]))
                 for y in x["answers"]:
                     if y["correct"]:
-                        print(Style.BRIGHT + Fore.GREEN + "Option {}: {}".format(alpha_order[counter_answers - 1], y["option"]))
+                        print(Style.BRIGHT + Fore.GREEN + "Option {}: {}".format(ALPHA_ORDER[counter_answers], y["option"]))
                     else:
-                        print("Option {}: {}".format(alpha_order[counter_answers - 1], y["option"]))
+                        print("Option {}: {}".format(ALPHA_ORDER[counter_answers - 1], y["option"]))
                     counter_answers += 1
                 counter_questions += 1
         return ""
@@ -132,7 +134,7 @@ class QuizEditMode(Quiz):
     def add_question(self, number, question):
         question_temp = {"Question": question}
         for x in range(1, number + 1):
-            question_temp["Option " +  alpha_order[x]] = input("Option " + alpha_order[x] + ". ")
+            question_temp["Option " +  ALPHA_ORDER[x]] = input("Option " + ALPHA_ORDER[x] + ". ")
         while True:
             correct = input("\nWhat option is the correct one? Write the letter: ").upper()
             for x in question_temp.keys():
@@ -196,52 +198,65 @@ class QuizEditMode(Quiz):
         print("Setup successfull!")
 
 # Class used in QuizingPlayer.py
+# DONE!
 class QuizPlayMode(Quiz):
         
     def play(self):
         print("Let's play!")
-        if shuffle_questions:
-            pass
-        else:
-            counter_questions = 1
+
+        temp = self.questions[:]
+        score = 0
+        got_right = 0
+
+        if self.settings["shuffle_questions"]:
+            random.shuffle(temp)
+    
+        if self.settings["shuffle_answers"]:
+            for x in enumerate(temp):
+                random.shuffle(temp[x[0]]["answers"])
+
+        counter_questions = 1
+        for question in temp:
             counter_answers = 1
-            for x in self.questions:
-                print("Question {}: {}\n".format(counter, x["question"]))
-                for y in x["answers"]:
-                    print("Option {}: {}".format(counter_answers - 1, y["option"]))
-                answer = input("\nAnd your answer is: ").upper()
-                print()
+            print("\nQuestion {}: {}\n".format(counter_questions, question["question"]))
+            for option in question["answers"]:
+                print("Option {}. {}".format(ALPHA_ORDER[counter_answers], option["option"]))
+                counter_answers += 1
+            while True:
+                answer = input("\n? ").upper()
+                try:
 
-                if x["answers"][alpha_order.index(answer)]["correct"]:
-                    for y in x["answers"]:
-                        if shit:
-                            pass
+                    if question["answers"][REVERSE_ALPHA_ORDER[answer] - 1]["correct"]:
+                        print(Style.BRIGHT + Fore.GREEN + "You're right!")
+                        got_right += 1
+                        score += self.settings["scoring"]["correct"]
 
-                    print("\nYou're right! You get {} points\n".format(self.scoring["correct"]))
-                    self.points += self.settings["scoring"]["correct"]
-                    self.right += 1
-
-                else:
-                    for y in zip(x.keys(), x.values()):
-                        if "Option" in y[0]:
-                            if y[0][7] == answer:
-                                print(Styele.BRIGHT + Fore.RED + "{}. {}".format(y[0], y[1]))
-
-                            elif y[0][7] == self.correct_answers[number - 1]:
-                                print(Style.BRIGHT + Fore.GREEN + "{}. {}".format(y[0], y[1]))
-
+                    else:
+                        print(Style.BRIGHT + Fore.RED +  "You're wrong!\n")
+                        score += self.settings["scoring"]["incorrect"]
+                        counter_answers = 1
+                        # Print correct answer with colors (insert unicorn puking rainbows)
+                        for option in question["answers"]:
+                            if question["answers"][REVERSE_ALPHA_ORDER[answer] - 1]["option"] == option["option"]:
+                                print(Style.BRIGHT + Fore.RED + "Option {}. {}".format(ALPHA_ORDER[counter_answers], option["option"]))
+                            elif option["correct"]:
+                                print(Style.BRIGHT + Fore.GREEN + "Option {}. {}".format(ALPHA_ORDER[counter_answers], option["option"]))
                             else:
-                                print ("{}. {}".format(y[0], y[1]))
-                    print("You're wrong! You get {} points\n".format(self.scoring["incorrect"]))
-                    self.points += self.scoring["incorrect"]
+                                print("Option {}. {}".format(ALPHA_ORDER[counter_answers], option["option"]))
+                            counter_answers += 1
 
-                number += 1
-            print(Style.BRIGHT + "END!")
-            print("You got {} answers right and {} points\n".format(self.right, self.points))
+                    counter_questions += 1
+                    break
+                    
+                except:
+                    print(Style.BRIGHT + Fore.RED + "\nInput a valid letter!")
+
+
+        print(Style.BRIGHT + "\nEND!")
+        getpass.getpass("You got {} answers right and {} points\n".format(got_right, score))
 
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
-    raise SystemExit
 
 # * Why the fuck didn't you first commented this
 # I have been staring at this for a whole 10 minutes

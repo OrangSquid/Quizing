@@ -1,4 +1,4 @@
-# DONE! DO NOT TOUCH THIS! THIS SHIT IS REFACTOREd
+# DONE! DO NOT TOUCH THIS! THIS SHIT IS REFACTORED
 
 import getpass
 import os
@@ -8,13 +8,12 @@ from colorama import *
 init(autoreset = True)
 
 def start_play(quiz):
-    print(Style.BRIGHT + "Welcome to the Quiz Player!")
-
     while True:
 
         if quiz.settings["preview"]:
             preview = True
 
+            print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
             print("1. Play {}".format(quiz.name))
             print("2. Preview")
@@ -23,6 +22,7 @@ def start_play(quiz):
         else:
             preview = False
 
+            print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
             print("1. Play {}".format(quiz.name))
             print(Fore.RED + Style.BRIGHT + "2. Exit\n")
