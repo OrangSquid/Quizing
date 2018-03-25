@@ -1,15 +1,13 @@
-import sys
 import getpass
 from colorama import *
 
 # This is to make sure that when using colorama the color goes back into the original form
 init(autoreset = True)
     
-def start_edit(quiz, file):
+def start_edit(quiz):
 
     print(Style.BRIGHT + "Welcome to the Quiz Editor!")
-    print("What do you want to do?")
-    print()
+    print("What do you want to do?\n")
     print("1. Change quiz settings")
     print("2. Check quiz")
     print("3. Add question")
@@ -28,7 +26,8 @@ def start_edit(quiz, file):
             print("3. Scoring system")
             print("4. Shuffling")
             print("5. Timer")
-            print(Fore.RED + Style.BRIGHT + "6. Return\n")
+            print("6. Preview")
+            print(Fore.RED + Style.BRIGHT + "7. Return\n")
 
             action = input()
 
@@ -59,6 +58,7 @@ def start_edit(quiz, file):
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
 
+            # Shuffling
             elif action == "4":
                 while True:
                     print("Do you want to change the shuffling for questions or answers?\n")
@@ -75,6 +75,7 @@ def start_edit(quiz, file):
                         print(Fore.RED + Style.BRIGHT + "You must input a 1 or 2!\n")
                         continue
 
+            # Timer
             elif action == "5":
                 while True:
                     try:
@@ -84,21 +85,27 @@ def start_edit(quiz, file):
                     except:
                         print(Style.BRIGHT + Fore.RED + "You must input a number!")
 
-            # Return
+            # Preview
             elif action == "6":
+                quiz.change_preview()
+                break
+
+            # Return
+            elif action == "7":
                 getpass.getpass("Press Enter to return . . . ")
                 break
 
+            # Invlaid number
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a number!\n")
                 continue
             
-        start_edit(quiz, file)
+        start_edit(quiz)
 
     # Check quiz
     elif action == "2":
         print(quiz)
-        start_edit(quiz, file)
+        start_edit(quiz)
 
     # Add question
     elif action == "3":
@@ -107,7 +114,7 @@ def start_edit(quiz, file):
             action = input("\nDo you want to use the default options number? It's {} [Y/N] ".format(quiz.settings["default_options"])).upper()
             if action == "Y":
                 quiz.add_question(quiz.settings["default_options"], question)
-                start_edit(quiz, file)
+                start_edit(quiz)
             elif action == "N":
                 while True:
                     try:
@@ -121,13 +128,11 @@ def start_edit(quiz, file):
                         print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!\n")
                         continue
                 quiz.add_question(options, question)
-                del options
-                del question
-                start_edit(quiz, file)
+                start_edit(quiz)
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input a Y or N!\n")
                 continue
-        start_edit(quiz, file)
+        start_edit(quiz)
         
     # Delete question
     elif action == "4":
@@ -139,21 +144,15 @@ def start_edit(quiz, file):
                 print(Fore.RED + Style.BRIGHT + "You must input a number!")
                 continue
         quiz.delete_question(number)
-        del number
-        start_edit(quiz, file)
+        start_edit(quiz)
         
     # Exit and save
     elif action == "5":
-        with open(file, "w") as f:
-            json.dump({"name": quiz.name, 
-                        "settings": quiz.settings, 
-                        "questions": quiz.questions}, f, indent="\t")
-            getpass.getpass("Press Enter to exit . . .")
-            sys.exit()
+        return
 
     else:
         print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
-        start_edit(quiz, file)
+        start_edit(quiz)
 
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
