@@ -53,8 +53,9 @@ It has this format:
 ```
 
 ## The .xquiz file
-**NOTE**: The script still doesn't have support for this file
-The .xquiz file XML file with a different extension. 
+**NOTE**: The script still doesn't have support for this file.
+
+The .xquiz file is an XML file with a different extension. 
 It has this format:
 ```xml
 <quiz ver = 1.0>
