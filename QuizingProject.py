@@ -80,10 +80,12 @@ def main():
             # Exit with nonexistent file
             elif action == "2" and not file_exists:
                 getpass.getpass("Press Enter to exit . . .")
+                break
 
             # Exit with existent file
             elif action == "3":
                 getpass.getpass("Press Enter to exit . . .")
+                break
 
             else:
                 print(Style.BRIGHT + Fore.RED + "You must input a valid number!")
