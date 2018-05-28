@@ -1,5 +1,3 @@
-# DONE! DO NOT TOUCH THIS! THIS SHIT IS REFACTORED
-
 import getpass
 import os
 from colorama import *
@@ -11,8 +9,6 @@ def start_play(quiz):
     while True:
 
         if quiz.settings["preview"]:
-            preview = True
-
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
             print("1. Play {}".format(quiz.name))
@@ -20,8 +16,6 @@ def start_play(quiz):
             print(Fore.RED + Style.BRIGHT + "3. Exit\n")
 
         else:
-            preview = False
-
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
             print("1. Play {}".format(quiz.name))
@@ -34,17 +28,17 @@ def start_play(quiz):
             quiz.play()
 
         # Preview
-        elif action == "2" and preview:
+        elif action == "2" and quiz.settings["preview"]:
             print(quiz)
 
         # Exit and preview off
-        elif action == "2" and not preview:
+        elif action == "2" and not quiz.settings["preview"]:
             getpass.getpass("Press Enter to exit . . .")
             os.system("cls")
             return
 
         # Exit and preview on
-        elif action == "3" and preview:
+        elif action == "3" and quiz.settings["preview"]:
             getpass.getpass("Press Enter to exit . . .")
             os.system("cls")
             return

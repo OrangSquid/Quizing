@@ -1,6 +1,7 @@
 import string
 import getpass
 import random
+import copy
 from colorama import *
 
 # This is to make sure that when using colorama the color goes back into the original form
@@ -8,7 +9,11 @@ init(autoreset = True)
 
 # Dicitonary to hold alphabet for quiz options
 ALPHA_ORDER = dict(enumerate(string.ascii_uppercase, 1))
-REVERSE_ALPHA_ORDER = reverse_alpha_order = dict(zip(ALPHA_ORDER.values(), ALPHA_ORDER.keys()))
+REVERSE_ALPHA_ORDER = dict(zip(ALPHA_ORDER.values(), ALPHA_ORDER.keys()))
+
+# For invalid arguments passed through **kwargs
+class InvalidArgumentError(Exception):
+    pass
 
 class Quiz():
     def __init__(self, name, settings, questions):
@@ -16,7 +21,6 @@ class Quiz():
         self.settings = settings
         self.questions = questions
 
-    # Method for printing the quiz
     def __str__(self):
         print(Style.BRIGHT + "QUIZ SETTINGS: \n")
         print("Default number question optitions: {}".format(self.settings["default_options"]))
@@ -24,24 +28,7 @@ class Quiz():
         print("Right Answer points: {}".format(self.settings["scoring"]["correct"]))
         print("Shuffling questions: {}".format(self.settings["shuffle_questions"]))
         print("Shuffling answers: {}".format(self.settings["shuffle_answers"]))
-        print("Timer: {}".format(self.settings["timer"]))
         print("Preview: {}".format(self.settings["preview"]))
-    
-        if self.questions == []:
-            print("There are currently no questions")
-        else:
-            counter_questions = 1
-            counter_answers = 1
-            for x in self.questions:
-                print("\nQuestion {}: {}\n".format(counter_questions, x["question"]))
-                for y in x["answers"]:
-                    if y["correct"]:
-                        print(Style.BRIGHT + Fore.GREEN + "Option {}: {}".format(ALPHA_ORDER[counter_answers], y["option"]))
-                    else:
-                        print("Option {}: {}".format(ALPHA_ORDER[counter_answers - 1], y["option"]))
-                    counter_answers += 1
-                counter_questions += 1
-        return ""
 
 # Class Used in QuizingEditor.py
 class QuizEditMode(Quiz):
@@ -50,15 +37,22 @@ class QuizEditMode(Quiz):
     def change_number_options(self, **kwargs):
         # kwargs accepts the variable "default_options"
         try:
-            self.settings["default_options"] = kwargs["default_options"]
-        except:
-            print(Back.RED + Style.BRIGHT + "Please note that the current questions won't be affected!\n")
-            try:
-                self.settings["default_options"] = int(input("How many options do you want then?"))
-            except:
-                print(Fore.RED + Style.BRIGHT + "You must input a number !!\n")
-                self.change.number_options()
-        print("The default number of options was changed successfully!")
+            if type(kwargs["default_options"]) == int:
+                self.settings["default_options"] = kwargs["default_options"]
+            else:
+                raise InvalidArgumentError("The value inputed through the argument is not valid")
+        except KeyError:
+            print(Back.RED + "Please note that the current questions won't be affected!\n")
+            print(Fore.YELLOW + "Current \"Default number of options\": {}".format(self.settings["default_options"]))
+            while True:
+                try:
+                    self.settings["default_options"] = int(input("New vaule: "))
+                except:
+                    print(Fore.RED + Style.BRIGHT + "You must input a valid number !!\n")
+                if self.settings["default_options"] > 26 or self.settings["default_options"] < 2:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number between 26 and 2!!\n")
+                break
+        print("The default number of options was changed successfully!\n")
 
     # DONE!
     def change_name(self, **kwargs):
@@ -66,93 +60,143 @@ class QuizEditMode(Quiz):
         try:
             self.name = kwargs["name"]
         except:
-            self.name = input("What's the new name of the quiz? The current name is {}\n\n".format(self.name))
-        print("Name changed successfully!")
+            print(Fore.YELLOW + "Current \"Name\": {}".format(self.name))
+            self.name = input("New value: ")
+        print("Name changed successfully!\n")
 
-    def change_scoring(self):
-        if option == "1":
-            while True:
-                print("Right now, for each wrong question you get {}.".format(self.settings["scoring"]["incorrect"]))
-                try:
-                    self.settings["scoring"]["incorrect"] = int(input("How many points should the player get?"))
-                    break
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-            print("Scoring system changed successufully!")
-
-        else:
-            while True:
-                print("Right now, for each right question you get {}.".format(self.settings["scoring"]["correct"]))
-                try:
-                    self.settings["scoring"]["correct"] = int(input("How many points should the player get?"))
-                    break
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-            print("Scoring system changed successufully!")
-
-    def change_timer(self, time):
-        self.settings["timer"] = time
-        print("Timer changed successufully!")
-
-    def change_shuffling(self, option):
-        if option == "1":
-            if self.settings["shuffle_questions"]:
-                print("Right now, the shuffling for questions is on")
+    # DONE!
+    def change_scoring(self, *args, **kwargs):
+        """ kwargs accepts the variables "scoring_correct" and "scoring_incorrect"
+        args is for the option of what the user wants to change in the cli"""
+        try:
+            if type(kwargs["scoring_incorrect"]) == int:
+                self.settings["scoring"]["incorrect"] = kwargs["scoring_incorrect"]
             else:
-                print("Right now, the shuffling for questions is off")
-            temp = input("Do you want to change it[Y/N]? ").lower()
-            while temp != "y" or temp != "n":
-                temp = input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
-            if temp == "y":
-                self.settings["shuffle_questions"] = not self.settings["shuffle_questions"]
-            print("Shuffling system changed successufully!")
+                raise InvalidArgumentError("The value inputed through the argument is not valid")
+        except KeyError:
+            try:
+                if type(kwargs["scoring_correct"]) == int:
+                    self.settings["scoring"]["correct"] = kwargs["scoring_correct"]
+                else:
+                    raise InvalidArgumentError("The value inputed through the argument is not valid")
+            except KeyError:
+                if args[0] == "1":
+                    while True:
+                        print(Fore.YELLOW + "Current \"Incorrect scoring\": {}.".format(self.settings["scoring"]["incorrect"]))
+                        try:
+                            self.settings["scoring"]["incorrect"] = int(input("New value: "))
+                            break
+                        except:
+                            print(Fore.RED + Style.BRIGHT + "You must input a number!")
 
+                else:
+                    while True:
+                        print(Fore.YELLOW + "Current \"Correct scoring\": {}.".format(self.settings["scoring"]["correct"]))
+                        try:
+                            self.settings["scoring"]["correct"] = int(input("New value: "))
+                            break
+                        except:
+                            print(Fore.RED + Style.BRIGHT + "You must input a number!")
         else:
-            if self.settings["shuffle_answers"]:
-                print("Right now, the shuffling for answers is on")
+            if type(kwargs["scoring_correct"]) == int:
+                self.settings["scoring"]["correct"] = kwargs["scoring_correct"]
             else:
-                print("Right now, the shuffling for answers is off")
-            temp = input("Do you want to change it[Y/N]? ").lower()
-            while temp != "y" or temp != "n":
-                temp = input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
-            if temp == "y":
-                self.settings["shuffle_answers"] = not self.settings["shuffle_answers"]
-            print("Shuffling system changed successufully!")
+                raise InvalidArgumentError("The value inputed through the argument is not valid")
+        print("Scoring system changed successufully!")
+
+    # DONE!
+    def change_shuffling(self, *args, **kwargs):
+        """ kwargs accepts the variables "shuffle_questions" and "shuffle_answers"
+        args is for the option of what the user wants to change in the cli"""
+        try:
+            if type(kwargs["shuffle_questions"]) == bool:
+                self.settings["shuffle_questions"] = kwargs["shuffle_questions"]
+            else:
+                raise InvalidArgumentError("The value inputed through the argument is not valid")
+        except KeyError:
+            try:
+                if type(kwargs["shuffle_answers"]) == bool:
+                    self.settings["shuffle_answers"] = kwargs["shuffle_answers"]
+                else:
+                    raise InvalidArgumentError("The value inputed through the argument is not valid")
+            except KeyError:
+                if args[0] == "1":
+                    if self.settings["shuffle_questions"]:
+                        print(Fore.YELLOW + "Current \"Shuffling questions\": ON")
+                    else:
+                        print(Fore.YELLOW + "Current \"Shuffling questions\": OFF")
+                    while True:
+                        temp = input("Switch it? [Y/N]").lower()
+                        if temp == "y":
+                            self.settings["shuffle_questions"] = not self.settings["shuffle_questions"]
+                            break
+                        elif temp == "n":
+                            break
+                        else:
+                            print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
+
+                else:
+                    if self.settings["shuffle_answers"]:
+                        print(Fore.YELLOW + "Current \"Shuffling answers\": ON")
+                    else:
+                        print(Fore.YELLOW + "Current \"Shuffling answers\": OFF")
+                    while True:
+                        temp = input("Switch it? [Y/N]").lower()
+                        if temp == "y":
+                            self.settings["shuffle_answers"] = not self.settings["shuffle_answers"]
+                            break
+                        elif temp == "n":
+                            break
+                        else:
+                            print(Fore.RED + Style.BRIGHT + "You msut input a [Y/N]!")
+        else:
+            if type(kwargs["scoring_correct"]) == int:
+                self.settings["scoring"]["correct"] = kwargs["scoring_correct"]
+            else:
+                raise InvalidArgumentError("The value inputed through the argument is not valid")
+        print("Shuffling system changed successufully!\n")
 
     def change_preview(self):
         if self.settings["preview"]:
-            print("Right now, the shuffling for questions is on")
+            print(Fore.YELLOW + "Current \"Preview\": ON")
         else:
-            print("Right now, the shuffling for questions is off")
-        temp = input("Do you want to change it[Y/N]? ").lower()
-        while temp != "y" or temp != "n":
-            temp = input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
-        if temp == "y":
-            self.settings["shuffle_questions"] = not self.settings["shuffle_questions"]
-        print("Shuffling system changed successufully!")
+            print(Fore.YELLOW + "Current \"Preview\": OFF")
+        while True:
+            temp = input("Do you want to change it? [Y/N] ").lower()
+            if temp == "y":
+                self.settings["preview"] = not self.settings["preview"]
+                break
+            elif temp == "n":
+                break
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
+
+        print("Shuffling system changed successufully!\n")
     
-    def add_question(self, number, question):
-        question_temp = {"Question": question}
-        for x in range(1, number + 1):
-            question_temp["Option " +  ALPHA_ORDER[x]] = input("Option " + ALPHA_ORDER[x] + ". ")
+    def add_question(self, number_options, question, *args, **kwargs):
+        question_temp = {"question": question, "answers": []}
+        for x in range(1, number_options + 1):
+            option = input("Option " + ALPHA_ORDER[x] + ". ")
+            question_temp["answers"].append({"option": option, "correct": False})
         while True:
             correct = input("\nWhat option is the correct one? Write the letter: ").upper()
-            for x in question_temp.keys():
-                # The 7th index is where the letter is *
-                if x[7] == correct:
+            for x in enumerate(question_temp["answers"]):
+                if REVERSE_ALPHA_ORDER[correct] == x[0] + 1:
+                    question_temp["answers"][x[0]]["correct"] = True
                     break
+                else:
+                    question_temp["answers"][x[0]]["correct"] = False               
             else:
                 print(Fore.RED + Style.BRIGHT + "You must input the letter of the correct option!")
                 continue
             break
         self.questions.append(question_temp)
-
-    def edit_question(self, number):
-        pass
+        print("Question added successufuly!\n")
 
     def delete_question(self, number):
         temp = self.questions.pop(number - 1)
         print(temp)
+        print("Question deleted successufuly!\n")
 
     def set_settings(self):
         # Default options number and scoring
@@ -185,17 +229,31 @@ class QuizEditMode(Quiz):
         else:
             self.settings["shuffle_answers"] == True
 
-        # Timer
-        while True:
-            try:
-                self.settings["timer"] = int(input("How much time do you want to answers each question? (0 = no timer) "))
-                break
-            except:
-                print(Style.BRIGHT + Fore.RED + "You must input a number!")
-
         # Name
         self.name = input("What's the name of this quiz?\n")
-        print("Setup successfull!")
+        print("Setup successfull!\n")
+
+    # Method for printing the quiz
+    def __str__(self, **kwargs):
+        super().__str__()
+    
+        print(Style.BRIGHT + "\nQUIZ QUESTIONS: ")
+        
+        if self.questions == []:
+            print("There are currently no questions")
+        else:
+            counter_questions = 1
+            for x in self.questions:
+                counter_answers = 1
+                print("\nQuestion {}: {}\n".format(counter_questions, x["question"]))
+                for y in x["answers"]:
+                    if y["correct"]:
+                        print(Style.BRIGHT + Fore.GREEN + "Option {}: {}".format(ALPHA_ORDER[counter_answers], y["option"]))
+                    else:
+                        print("Option {}: {}".format(ALPHA_ORDER[counter_answers], y["option"]))
+                    counter_answers += 1
+                counter_questions += 1
+        return ""
 
 # Class used in QuizingPlayer.py
 # DONE!
@@ -204,7 +262,7 @@ class QuizPlayMode(Quiz):
     def play(self):
         print("Let's play!")
 
-        temp = self.questions[:]
+        temp = copy.deepcopy(self.questions)
         score = 0
         got_right = 0
 
@@ -214,6 +272,9 @@ class QuizPlayMode(Quiz):
         if self.settings["shuffle_answers"]:
             for x in enumerate(temp):
                 random.shuffle(temp[x[0]]["answers"])
+
+        print(temp)
+        print(self.questions)
 
         counter_questions = 1
         for question in temp:
@@ -255,10 +316,24 @@ class QuizPlayMode(Quiz):
         print(Style.BRIGHT + "\nEND!")
         getpass.getpass("You got {} answers right and {} points\n".format(got_right, score))
 
+    # Method for printing the quiz
+    def __str__(self, **kwargs):
+        super().__str__()
+    
+        print(Style.BRIGHT + "\nQUIZ QUESTIONS: ")
+        
+        if self.questions == []:
+            print("There are currently no questions")
+        else:
+            counter_questions = 1
+            for x in self.questions:
+                counter_answers = 1
+                print("\nQuestion {}: {}\n".format(counter_questions, x["question"]))
+                for y in x["answers"]:
+                    print("Option {}: {}".format(ALPHA_ORDER[counter_answers], y["option"]))
+                    counter_answers += 1
+                counter_questions += 1
+        return ""
+
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
-
-# * Why the fuck didn't you first commented this
-# I have been staring at this for a whole 10 minutes
-# Trying to figure it out
-# Dumbass

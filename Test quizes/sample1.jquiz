@@ -1,0 +1,50 @@
+{
+	"quiz_ver": 1.0,
+	"name": "sample1",
+	"settings": {
+		"default_options": 4,
+		"scoring": {
+			"incorrect": -5,
+			"correct": 10
+		},
+		"shuffle_questions": true,
+		"shuffle_answers": true,
+		"preview": true
+	},
+	"questions": [
+		{
+			"question": "How far is Earth from the Sun?",
+			"answers": [
+				{
+					"option": "150.000.000km",
+					"correct": true
+				},
+				{
+					"option": "140.000.000km",
+					"correct": false
+				},
+				{
+					"option": "130.000.000km",
+					"correct": false
+				}
+			]
+		},
+		{
+			"question": "How many 30 day months does 2018 have",
+			"answers": [
+				{
+					"correct": true,
+					"option": "4"
+				},
+				{
+					"correct": false,
+					"option": "5"
+				},
+				{
+					"correct": true,
+					"option": "6"
+				}
+			]
+		}
+	]
+}

@@ -15,7 +15,7 @@ def main():
     def choose_path(**kwargs):
         # Diretcs the user to either QuizingEditor.py or QuzingPlayer.py
 
-        def save():
+        def save(file):
             # Saves the file after editing is finished in QuizingEditor
             with open(file, "w") as f:
                 json.dump({"quiz_ver": 1.0,
@@ -28,7 +28,7 @@ def main():
         try:
             with open(kwargs["file"], "r") as f:
                 temp = json.load(f)
-        except:
+        except KeyError:
             file_exists = False
             print("Would you like to:\n")
             print("1. Make a Quiz")
@@ -63,8 +63,10 @@ def main():
                     quiz = QuizingCore.QuizEditMode(temp["name"], 
                                              temp["settings"], 
                                              temp["questions"])
+                    if quiz.settings["default_options"] <= 2 or quiz.settings["default_options"] >= 26:
+                        pass
                 QuizingEditor.start_edit(quiz)
-                save()
+                save(kwargs["file"])
                 choose_path(file = kwargs["file"])
 
             # Play Quiz
@@ -78,12 +80,10 @@ def main():
             # Exit with nonexistent file
             elif action == "2" and not file_exists:
                 getpass.getpass("Press Enter to exit . . .")
-                sys.exit()
 
             # Exit with existent file
             elif action == "3":
                 getpass.getpass("Press Enter to exit . . .")
-                sys.exit()
 
             else:
                 print(Style.BRIGHT + Fore.RED + "You must input a valid number!")
@@ -129,7 +129,6 @@ def main():
     else:
         print(Fore.BRIGHT + Fore.RED + "Invalid file passed!\n")
         getpass.getpass("Press Enter to exit . . . ")
-        sys.exit()
 
 if __name__ == "__main__":
     main()

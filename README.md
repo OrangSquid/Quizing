@@ -19,7 +19,6 @@ It has this format:
 		},
 		"shuffle_questions": false,
 		"shuffle_answers": false,
-		"timer": 0,
 		"preview": false
 	},
 	"questions": [
@@ -68,7 +67,6 @@ It has this format:
 		</scoring>
 		<shuffle_questions on = false/>
 		<shuffle_answers on = false/>
-		<timer number = 0/>
 	<questions>
 		<question>How far is Earth from the Sun?</question>
 		<answers>

@@ -1,0 +1,21 @@
+<quiz ver = 1.0>
+	<name>sample1</name>
+	<settings>
+		<default_options number = 3/>
+		<scoring>
+			<incorrect number = -5/>
+			<correct number = 10/>
+		</scoring>
+		<shuffle_questions on = false/>
+		<shuffle_answers on = false/>
+		<timer number = 0/>
+		<preview on = false/>
+	<questions>
+		<question>How far is Earth from the Sun?</question>
+		<answers>
+			<option correct = true>150.000.000km</option>
+			<option correct = false>140.000.000km</option>
+			<option correct = false>130.000.000km</option>
+		</answers>
+	</questions>
+</quiz>
