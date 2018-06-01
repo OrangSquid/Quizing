@@ -40,7 +40,6 @@ def start_play(quiz):
         # Exit and preview on
         elif action == "3" and quiz.settings["preview"]:
             getpass.getpass("Press Enter to exit . . .")
-            os.system("cls")
             return
             
         else:

@@ -204,30 +204,48 @@ class QuizEditMode(Quiz):
             self.settings["default_options"] = int(input("How many options will be the default number? "))
             while self.settings["default_options"] >= 27 or self.settings["default_options"] <= 1:
                 self.settings["default_options"] = int(input(Fore.RED + Style.BRIGHT + "The number must be between 2 and 26! "))
-            w = int(input("How many points should the player get for each wrong answer?\n"))
-            r = int(input("How many points should the player get for each right answer?\n"))
+            w = int(input("How many points should the player get for each wrong answer? "))
+            r = int(input("How many points should the player get for each right answer? "))
         except:
             print(Fore.RED + Style.BRIGHT + "You must input a number!")
             self.set_settings()
         self.settings["scoring"] = {"incorrect": w, "correct": r}
 
         # Shuffle questions
-        temp = input("Shuffle questions? [Y/N] ").lower()
-        while temp != "y" or temp != "n":
-            input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
-        if temp == "y":
-            self.settings["shuffle_questions"] == True
-        else:
-            self.settings["shuffle_questions"] == True
+        while True:
+            temp = input("Shuffle questions? [Y/N] ").lower()
+            if temp == "y":
+                self.settings["shuffle_questions"] = True
+                break
+            elif temp == "n":
+                self.settings["shuffle_questions"] = False
+                break
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
 
         # Shuffle answers
-        temp = input("Shuffle answers? [Y/N] ").lower()
-        while temp != "y" or temp != "n":
-            input(Style.BRIGHT + Fore.RED + "You must input a [Y/N]! ")
-        if temp == "y":
-            self.settings["shuffle_answers"] == True
-        else:
-            self.settings["shuffle_answers"] == True
+        while True:
+            temp = input("Shuffle answers? [Y/N] ").lower()
+            if temp == "y":
+                self.settings["shuffle_answers"] = True
+                break
+            elif temp == "n":
+                self.settings["shuffle_answers"] = False
+                break
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
+
+        # Preview
+        while True:
+            temp = input("Preview in playing mode? [Y/N] ").lower()
+            if temp == "y":
+                self.settings["preview"] = True
+                break
+            elif temp == "n":
+                self.settings["preview"] = False
+                break
+            else:
+                print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
 
         # Name
         self.name = input("What's the name of this quiz?\n")
