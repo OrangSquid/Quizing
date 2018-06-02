@@ -34,9 +34,8 @@ def main():
         else:
             file_exists = True
             print("Would you like to:\n")
-            print("1. Edit the Quiz")
-            print("2. Play the Quiz")
-            #print("3.Make a new Quiz")
+            print("1. Edit \"{}\"".format(temp["name"]))
+            print("2. Play \"{}\"".format(temp["name"]))
             print(Fore.RED + Style.BRIGHT + "3. Exit\n")
 
         while True:
@@ -51,7 +50,7 @@ def main():
                         json.dump(
                             {"quiz_ver": 1.0,
                              "name" : name,
-                             "settings" : {},
+                             "settings" : {"scoring": {}},
                              "questions" : []}, f, indent = "\t")
                     with open("{}.jquiz".format(name), "r") as f:
                         temp = json.load(f)
@@ -84,16 +83,17 @@ def main():
             # Exit with nonexistent file
             elif action == "2" and not file_exists:
                 getpass.getpass("Press Enter to exit . . .")
+                sys.exit()
                 break
 
             # Exit with existent file
             elif action == "3":
                 getpass.getpass("Press Enter to exit . . .")
+                sys.exit()
                 break
 
             else:
-                print(Style.BRIGHT + Fore.RED + "DOES NOT COMPUTE! DOES NOT COMPUTE! SYSTEM SHUTDOWN!")
-                print("Just kidding!")
+                print(Style.BRIGHT + Fore.RED + "You must input a number between 1 and 4")
                 continue
 
     file = " ".join(sys.argv[1:])
@@ -124,19 +124,24 @@ def main():
             while True:
                 try:
                     option = int(input("\n"))
-                except:
+                except ValueError:
                     print(Style.BRIGHT + Fore.RED + "You must input a valid number!")
                     continue
-                if option <= len(valid_options):
+                if option <= len(valid_options) and option >= 1:
                     choose_path(file = valid_options[option - 1])
+                else:
+                    print(Style.BRIGHT + Fore.RED + "You must input a valid number!")
+
     # Valid file
     elif os.path.isfile(file) and file.endswith(".jquiz"):
         print("File detected through console argument\n")
         choose_path(file = file)
+
     # Invalid file
     else:
         print(Fore.BRIGHT + Fore.RED + "Invalid file passed!\n")
-        getpass.getpass("Press Enter to exit . . . ")
+        choose_path()
+
 
 if __name__ == "__main__":
     main()

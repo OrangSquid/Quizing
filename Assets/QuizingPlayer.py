@@ -11,14 +11,14 @@ def start_play(quiz):
         if quiz.settings["preview"]:
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
-            print("1. Play {}".format(quiz.name))
+            print("1. Play \"{}\"".format(quiz.name))
             print("2. Preview")
             print(Fore.RED + Style.BRIGHT + "3. Exit\n")
 
         else:
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
-            print("1. Play {}".format(quiz.name))
+            print("1. Play \"{}\"".format(quiz.name))
             print(Fore.RED + Style.BRIGHT + "2. Exit\n")
 
         action = input()

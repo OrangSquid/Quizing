@@ -86,7 +86,7 @@ class QuizEditMode(Quiz):
                         try:
                             self.settings["scoring"]["incorrect"] = int(input("New value: "))
                             break
-                        except:
+                        except ValueError:
                             print(Fore.RED + Style.BRIGHT + "You must input a number!")
 
                 else:
@@ -95,7 +95,7 @@ class QuizEditMode(Quiz):
                         try:
                             self.settings["scoring"]["correct"] = int(input("New value: "))
                             break
-                        except:
+                        except ValueError:
                             print(Fore.RED + Style.BRIGHT + "You must input a number!")
         else:
             if type(kwargs["scoring_correct"]) == int:
@@ -173,7 +173,7 @@ class QuizEditMode(Quiz):
 
         print("Shuffling system changed successufully!\n")
     
-    def add_question(self, number_options, question, *args, **kwargs):
+    def add_question(self, number_options, question):
         question_temp = {"question": question, "answers": []}
         for x in range(1, number_options + 1):
             option = input("Option " + ALPHA_ORDER[x] + ". ")
@@ -199,17 +199,32 @@ class QuizEditMode(Quiz):
         print("Question deleted successufuly!\n")
 
     def set_settings(self):
-        # Default options number and scoring
-        try:
-            self.settings["default_options"] = int(input("How many options will be the default number? "))
-            while self.settings["default_options"] >= 27 or self.settings["default_options"] <= 1:
-                self.settings["default_options"] = int(input(Fore.RED + Style.BRIGHT + "The number must be between 2 and 26! "))
-            w = int(input("How many points should the player get for each wrong answer? "))
-            r = int(input("How many points should the player get for each right answer? "))
-        except:
-            print(Fore.RED + Style.BRIGHT + "You must input a number!")
-            self.set_settings()
-        self.settings["scoring"] = {"incorrect": w, "correct": r}
+        # Default number of options
+        while True:
+            try:
+                self.settings["default_options"] = int(input("How many options will be the default number? "))
+                if self.settings["default_options"] >= 27 or self.settings["default_options"] <= 1:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!")
+                else:
+                    break
+            except ValueError:
+                print(Fore.RED + Style.BRIGHT + "You must input a number between 2 and 26!")
+
+        # Incorrect scoring
+        while True:
+            try:
+                self.settings["scoring"]["incorrect"] = int(input("How many points should the player for each wrong answer? "))
+                break
+            except ValueError:
+                print(Fore.RED + Style.BRIGHT + "You must input a valid number!")
+        
+        # Correct scoring
+        while True:
+            try:
+                self.settings["scoring"]["correct"] = int(input("How many points should the player for each right answer? "))
+                break
+            except ValueError:
+                print(Fore.RED + Style.BRIGHT + "You must input a valid number!")
 
         # Shuffle questions
         while True:
@@ -248,7 +263,7 @@ class QuizEditMode(Quiz):
                 print(Fore.RED + Style.BRIGHT + "You must input a [Y/N]!")
 
         # Name
-        self.name = input("What's the name of this quiz?\n")
+        self.name = input("What will be the name of this quiz? ")
         print("Setup successfull!\n")
 
     # Method for printing the quiz
@@ -291,9 +306,6 @@ class QuizPlayMode(Quiz):
             for x in enumerate(temp):
                 random.shuffle(temp[x[0]]["answers"])
 
-        print(temp)
-        print(self.questions)
-
         counter_questions = 1
         for question in temp:
             counter_answers = 1
@@ -332,7 +344,8 @@ class QuizPlayMode(Quiz):
 
 
         print(Style.BRIGHT + "\nEND!")
-        getpass.getpass("You got {} answers right and {} points\n".format(got_right, score))
+        print("You got {} answers right and {} points\n".format(got_right, score))
+        getpass.getpass("Press Enter to go back . . . ")
 
     # Method for printing the quiz
     def __str__(self, **kwargs):
