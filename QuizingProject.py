@@ -75,8 +75,8 @@ def main():
             # Play Quiz
             elif action == "2" and file_exists:
                 quiz = QuizingCore.QuizPlayMode(temp["name"], 
-                                        temp["settings"], 
-                                        temp["questions"])
+                                                temp["settings"], 
+                                                temp["questions"])
                 QuizingPlayer.start_play(quiz)
                 choose_path(file = kwargs["file"])
 
@@ -93,7 +93,7 @@ def main():
                 break
 
             else:
-                print(Style.BRIGHT + Fore.RED + "You must input a number between 1 and 4")
+                print(Style.BRIGHT + Fore.RED + "You must input a number between 1 and 3")
                 continue
 
     file = " ".join(sys.argv[1:])
@@ -113,7 +113,30 @@ def main():
             choose_path()
         elif len(valid_options) == 1:
             print("File detected in current directory: {}".format(valid_options[0]))
-            choose_path(file = valid_options[0])
+            print("1. Use this file")
+            print("2. Don't use this file")
+            print(Fore.RED + Style.BRIGHT + "3. Exit\n")
+
+            while True:
+                action = input()
+
+                # Use the file
+                if action == "1":
+                    choose_path(file = valid_options[0])
+                    break
+
+                # Don't use the file
+                elif action == "2":
+                    choose_path()
+                    break
+
+                # Exit
+                elif action == "3":
+                    getpass.getpass("Press Enter to exit . . . ")
+                    sys.exit()
+                
+                else:
+                    print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 3!")
         else:
             print("Multiple files detected in current directory")
             print("Please choose one!\n")
@@ -121,6 +144,7 @@ def main():
             for file in valid_options:
                 print("{}. {}".format(option, file))
                 option += 1
+            print(Fore.CYAN + "{}. Make a new Quiz".format(option))
             while True:
                 try:
                     option = int(input("\n"))
@@ -129,6 +153,8 @@ def main():
                     continue
                 if option <= len(valid_options) and option >= 1:
                     choose_path(file = valid_options[option - 1])
+                elif option == len(valid_options) + 1:
+                    choose_path()
                 else:
                     print(Style.BRIGHT + Fore.RED + "You must input a valid number!")
 

@@ -289,7 +289,6 @@ class QuizEditMode(Quiz):
         return ""
 
 # Class used in QuizingPlayer.py
-# DONE!
 class QuizPlayMode(Quiz):
         
     def play(self):

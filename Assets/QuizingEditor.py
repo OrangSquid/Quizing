@@ -150,8 +150,8 @@ def start_edit(quiz):
         elif action == "5":
             break
 
-    else:
-        print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!")
+        else:
+            print(Fore.RED + Style.BRIGHT + "You must input a number between 1 and 6!\n")
 
 if __name__ == "__main__":
     input("Please use QuizingProject to start! Press Enter . . . ")
