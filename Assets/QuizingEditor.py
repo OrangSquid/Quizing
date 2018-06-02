@@ -132,15 +132,19 @@ def start_edit(quiz):
         
         # Delete question
         elif action == "4":
-            while True:
-                try:
-                    print(quiz)
-                    number = int(input("What question do you want to delete?"))
-                    break
-                except:
-                    print(Fore.RED + Style.BRIGHT + "You must input a number!")
-                    continue
-            quiz.delete_question(number)
+            if quiz.questions == []:
+                print("There are no questions to delete.")
+                getpass.getpass("Press Enter to go back . . .")
+            else:
+                while True:
+                    try:
+                        print(quiz)
+                        number = int(input("What question do you want to delete?"))
+                        break
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "You must input a number!")
+                        continue
+                quiz.delete_question(number)
         
         # Exit and save
         elif action == "5":

@@ -11,14 +11,14 @@ def start_play(quiz):
         if quiz.settings["preview"]:
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
-            print("1. Play {}".format(quiz.name))
+            print("1. Play \"{}\"".format(quiz.name))
             print("2. Preview")
             print(Fore.RED + Style.BRIGHT + "3. Exit\n")
 
         else:
             print(Style.BRIGHT + "\nWelcome to the Quiz Player!")
             print("What do you want to do?")
-            print("1. Play {}".format(quiz.name))
+            print("1. Play \"{}\"".format(quiz.name))
             print(Fore.RED + Style.BRIGHT + "2. Exit\n")
 
         action = input()
@@ -40,7 +40,6 @@ def start_play(quiz):
         # Exit and preview on
         elif action == "3" and quiz.settings["preview"]:
             getpass.getpass("Press Enter to exit . . .")
-            os.system("cls")
             return
             
         else:
