@@ -114,7 +114,7 @@ def main():
         elif len(valid_options) == 1:
             print("File detected in current directory: {}".format(valid_options[0]))
             print("1. Use this file")
-            print("2. Don't use this file")
+            print(Fore.CYAN + "2. Don't use this file")
             print(Fore.RED + Style.BRIGHT + "3. Exit\n")
 
             while True:
