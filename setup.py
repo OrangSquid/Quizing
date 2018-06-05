@@ -10,8 +10,7 @@ options = {
 
 
 setup(name='QuizingProject',
-      version='1.0.1',
+      version='1.1',
       description='Script to make quizes and play them',
       options=options,
-      executables=executables
-      )
+      executables=executables)

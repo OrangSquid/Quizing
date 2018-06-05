@@ -51,34 +51,3 @@ It has this format:
 	]
 }
 ```
-
-## The .xquiz file
-**NOTE**: The script still doesn't have support for this file.
-
-The .xquiz file is an XML file with a different extension. 
-It has this format:
-```xml
-<quiz ver = 1.0>
-	<name>sample1</name>
-	<settings>
-		<default_options number = 3/>
-		<scoring>
-			<incorrect number = -5/>
-			<correct number = 10/>
-		</scoring>
-		<shuffle_questions on = false/>
-		<shuffle_answers on = false/>
-	<questions>
-		<question>How far is Earth from the Sun?</question>
-		<answers>
-			<option correct = true>150.000.000km</option>
-			<option correct = false>140.000.000km</option>
-			<option correct = false>130.000.000km</option>
-		</answers>
-		<question>Question example</question>
-		<answers>
-			<option correct = true>Option example</option>
-		</answers>
-	</questions>
-</quiz>
-```
