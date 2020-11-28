@@ -3,3 +3,9 @@ build
 .vs
 *.sublime-project
 *.sublime-workspace
+.vscode/launch.json
+QuizingProjectUI.py
+Icon.png
+QuizingProjectGUI.pyw
+QuizingProjectGUI.py
+shit.jquiz
